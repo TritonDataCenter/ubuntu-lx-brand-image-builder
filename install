@@ -48,13 +48,14 @@ deb-src http://security.ubuntu.com/ubuntu trusty-security universe
 SOURCES
 
 echo "==> Installing packages..."
-chroot $INSTALL_DIR apt-get  -y clean
-chroot $INSTALL_DIR apt-get  -y update
-chroot $INSTALL_DIR apt-get  -y install openssh-server vim wget curl locales man-db
+chroot $INSTALL_DIR apt-get -y clean
+chroot $INSTALL_DIR apt-get -y update
+chroot $INSTALL_DIR apt-get -y install openssh-server vim wget curl locales man-db
 
 echo "==> Cleaning up linux-image packages"
 chroot $INSTALL_DIR apt-get -y purge linux-image*
 chroot $INSTALL_DIR apt-get -y autoremove
+chroot $INSTALL_DIR apt-get -y clean
 
 
 echo "==> Setting TZ to UTC"
