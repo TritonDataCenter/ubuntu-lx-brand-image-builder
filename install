@@ -22,7 +22,7 @@ if [ -d $INSTALL_DIR ]; then
   mkdir -p $INSTALL_DIR
 fi
 
-debootstrap wheezy $INSTALL_DIR http://http.debian.net/debian/
+debootstrap trusty $INSTALL_DIR http://archive.ubuntu.com/ubuntu/
 echo "==> Done!"
 
 echo "==> Installing packages..."
