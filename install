@@ -28,7 +28,7 @@ echo "==> Done!"
 echo "==> Installing packages..."
 chroot $INSTALL_DIR apt-get  -y clean
 chroot $INSTALL_DIR apt-get  -y update
-chroot $INSTALL_DIR apt-get  -y install openssh-server vim wget curl less locales
+chroot $INSTALL_DIR apt-get  -y install openssh-server vim wget curl less locales man
 
 echo "==> Cleaning up linux-image packages"
 chroot $INSTALL_DIR apt-get -y purge linux-image*
