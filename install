@@ -25,6 +25,10 @@ fi
 debootstrap trusty $INSTALL_DIR http://archive.ubuntu.com/ubuntu/
 echo "==> Done!"
 
+echo "==> Setting locale to en_US.UTF-8"
+chroot $INSTALL_DIR locale-gen en_US.UTF-8
+chroot $INSTALL_DIR dpkg-reconfigure locales
+
 echo "==> Installing packages..."
 chroot $INSTALL_DIR apt-get  -y clean
 chroot $INSTALL_DIR apt-get  -y update
