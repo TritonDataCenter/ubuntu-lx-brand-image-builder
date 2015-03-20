@@ -8,7 +8,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-INSTALL_DIR=/data/chroot
+INSTALL_DIR=/mnt/chroot
 NAME="Ubuntu 14.04 LX Brand"
 BUILD_DATE=$(date +%Y%m%d)
 DOCS="https://docs.joyent.com/images"
