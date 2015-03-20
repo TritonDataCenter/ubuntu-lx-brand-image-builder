@@ -28,6 +28,7 @@ echo "==> Done!"
 echo "==> Setting locale to en_US.UTF-8"
 chroot $INSTALL_DIR locale-gen en_US.UTF-8
 chroot $INSTALL_DIR dpkg-reconfigure locales
+echo "LANG=\"en_US.UTF-8\"" > $INSTALL_DIR/etc/default/locale
 
 echo "==> Installing packages..."
 chroot $INSTALL_DIR apt-get  -y clean
