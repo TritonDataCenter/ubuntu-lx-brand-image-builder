@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+#
+# Copyright (c) 2015 Joyent Inc., All rights reserved.
+#
+# Install Ubuntu 14.04 into a directory, modify the installation, then tar it up.
+#
+
+set -euo pipefail
+IFS=$'\n\t'
+
+INSTALL_DIR=/data/chroot
+NAME="Ubuntu 14.04 LX Brand"
+BUILD_DATE=$(date +%Y%m%d)
+DOCS="https://docs.joyent.com/images"
+TARGET="ubuntu-14.04-lx-${BUILD_DATE}.tar.gz"
+
+echo "==> Installing Ubuntu 14.04 into $INSTALL_DIR"
+
+if [ -d $INSTALL_DIR ]; then
+  echo "====> Found previous chroot. Deleting and creating a new one."
+  rm -rf $INSTALL_DIR
+  mkdir -p $INSTALL_DIR
+fi
+
+debootstrap wheezy $INSTALL_DIR http://http.debian.net/debian/
+echo "==> Done!"
+
+echo "==> Installing packages..."
+chroot $INSTALL_DIR apt-get  -y clean
+chroot $INSTALL_DIR apt-get  -y update
+chroot $INSTALL_DIR apt-get  -y install openssh-server vim wget curl less locales
+
+echo "==> Cleaning up linux-image packages"
+chroot $INSTALL_DIR apt-get -y purge linux-image*
+chroot $INSTALL_DIR apt-get -y autoremove
+
+
+echo "==> Setting TZ to UTC"
+rm $INSTALL_DIR/etc/localtime
+cp $INSTALL_DIR/usr/share/zoneinfo/UTC $INSTALL_DIR/etc/localtime
+
+echo "==> Disabling PasswordAuthentication"
+sed s/PasswordAuthentication\ yes/PasswordAuthentication\ no/ -i $INSTALL_DIR/etc/ssh/sshd_config
+
+echo "==> Creating /etc/motd"
+cat << MOTD > $INSTALL_DIR/etc/motd
+   __        .                   .
+ _|  |_      | .-. .  . .-. :--. |-
+|_    _|     ;|   ||  |(.-' |  | |
+  |__|   \`--'  \`-' \`;-| \`-' '  ' \`-'
+                   /  ;  Instance ($NAME $BUILD_DATE)
+                   \`-'   $DOCS
+
+MOTD
+
+echo "==> Creating /etc/product file"
+cat << PRODUCT > $INSTALL_DIR/etc/product
+Name: Joyent Instance
+Image: $NAME $BUILD_DATE
+Documentation: $DOCS
+Description: $NAME $BUILD_DATE.
+PRODUCT
+
+echo "==> Installing Guest tools in $INSTALL_DIR"
+#cp -r ./guest-tools/lib/smartdc $INSTALL_DIR/lib/
+cp -r ./guest-tools/usr/sbin/mdata-* $INSTALL_DIR/usr/sbin/
+cp -r ./guest-tools/usr/share/man/man1/mdata-* $INSTALL_DIR/usr/share/man/man1/
+cp ./guest-tools/lib/smartdc/joyent_rc.local $INSTALL_DIR/etc/rc.local
+echo "==> Done!"
+sleep 1 
+
+echo "==> Saving installation as $TARGET. This may take a few minutes."
+tar czf $TARGET --exclude-from=exclude.txt $INSTALL_DIR/
+
+echo "==> Installation complete!"
+echo "==> $TARGET"
+
+exit 0

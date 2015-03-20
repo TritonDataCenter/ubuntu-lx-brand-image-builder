@@ -1,0 +1,114 @@
+#!/usr/bin/env bash
+#
+# Copyright (c) 2015 Joyent Inc., All rights reserved.
+#
+
+set -o errexit
+
+now=$(date -u +%Y-%m-%dT%TZ)
+vm_uuid=$(uuid)
+SUM=/usr/bin/sum
+
+function usage
+{
+    cat <<USAGE
+Usage: $0 -f filename -n <name> -v <version> [options]
+
+    -d <image description> (optional, default: "<NAME> <VERSION> VM Image")
+    -f <filename of VM image> (required)
+    -n <name of VM image> (required)
+    -v <version of VM image> (required)
+    -h <homepage link> (optional)
+
+Example:
+
+    $0 -f ubuntu-14.04.20150319.zfs.gz -n lx-ubuntu-14.04-v 20150319
+
+USAGE
+    exit 1
+}
+
+while getopts d:f:n:v:h:? c; do
+    case ${c} in
+    d)
+        description=${OPTARG}
+        ;;
+    f)
+        filename=${OPTARG}
+        ;;
+    n)
+        name=${OPTARG}
+        ;;
+    v)
+        version=${OPTARG}
+        ;;
+    h)
+        homepage=${OPTARG}
+        ;;
+    \?)
+        usage
+        ;;
+    esac
+done
+
+if [[ -z ${filename} || -z ${name} || -z ${version} ]]; then
+    echo "FATAL: All of -f, -n and -v are required."
+    usage
+fi
+
+if [[ -z ${description} ]]; then
+    description="${name} ${version} LX-brand image"
+fi
+
+
+if [[ -z ${homepage} ]]; then
+    homepage=https://docs.joyent.com/images
+fi
+
+if [[ ! -f ${filename} ]]; then
+    echo "FATAL: ${filename} does not exist."
+    usage
+fi
+
+shasum=$($SUM -x sha1 ${filename} | cut -d' ' -f1)
+filesize=$(ls -l ${filename} | awk '{ print $5 }')
+
+cat <<EOF
+{
+  "v": "2",
+  "name": "${name}",
+  "version": "${version}",
+  "type": "lx-dataset",
+  "description": "${description}",
+  "homepage": "${homepage}",
+  "published_at": "${now}",
+  "os": "other",
+  "files": [
+    {
+      "sha1": "${shasum}",
+      "size": ${filesize},
+      "compression": "gzip"
+    }
+  ],
+  "requirements": {
+    "networks": [
+      {
+        "name": "net0",
+        "description": "public"
+      }
+    ],
+    "min_platform": {
+         "7.0": "20150309T232622Z"
+       }
+  },
+  "uuid": "${vm_uuid}",
+  "public": false,
+  "owner": "00000000-0000-0000-0000-000000000000",
+  "tags": {
+    "role": "os",
+    "kernel_version": "3.13.0"
+  }
+}
+EOF
+
+exit 0

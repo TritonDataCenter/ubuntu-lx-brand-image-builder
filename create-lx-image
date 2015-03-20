@@ -1,0 +1,204 @@
+#!/usr/bin/env bash
+#
+# Copyright (c) 2015 Joyent Inc., All rights reserved.
+#
+# Create an lx-brand image from a given tar file
+
+set -euo pipefail
+IFS=$'\n\t'
+
+BUILD_DATE=$(date +%Y%m%d)
+IMAGE_NAME="ubuntu-14.04-lx"
+tarball=
+iuuid=$(uuid -v4)
+iuuid=ubuntu-14.04-$BUILD_DATE
+
+function usage() {
+cat <<EOF
+
+  Usage: $0 -t {path to archive}
+
+  Create an lx brand Ubuntu image from a given tar file
+
+  OPTIONS:
+  -t The path to the tar archive
+  -h Show this message
+
+EOF
+}
+
+while getopts "ht:" OPTION
+do
+  case $OPTION in
+    h)
+      usage
+      exit 1
+      ;;
+    t)
+      tarball="$OPTARG"
+      ;;
+    ?)
+      usage
+      exit
+      ;;
+  esac
+done
+
+
+if [[ -z $tarball ]]; then
+  echo "==> ERROR: the install archive is required"
+  usage
+  exit 1
+fi
+
+if [[ ! -a "$tarball" ]]; then
+  printf "==> ERROR: %s: file or directory not found\n" $tarball
+  exit 1
+fi
+
+if [[ "$(echo $tarball | cut -c 1)" != "/" ]]; then
+  printf "==> Pathname '%s' specified to -t must be absolute\n" $tarball
+  exit 1
+fi
+
+if [[ ! -r "$tarball" ]]; then
+  printf "==> Cannot read file '%s'\n" $tarball
+  exit 1
+fi
+
+if [[ ! -f "$tarball" ]]; then
+  echo "==> ERROR: must be a gzip, bzip2, .Z or uncompressed tar archive"
+  exit 1
+fi
+
+filetype=$({ LC_ALL=C file $tarball | awk '{print $2}' ; } 2>/dev/null)
+
+if [[ "$filetype" = "gzip" ]]; then
+  gtaropts="-xz"
+elif [[ "$filetype" = "bzip2" ]]; then
+  gtaropts="-xj"
+elif [[ "$filetype" = "compressed" ]]; then
+  gtaropts="-xZ"
+elif [[ "$filetype" = "USTAR" ]]; then
+  gtaropts="-x"
+else
+  printf "==> ERROR: must be a gzip, bzip2, .Z or uncompressed tar archive"
+  exit 1
+fi
+
+gtaropts="${gtaropts}f"
+
+zpath="/zones/$iuuid"
+zroot="/zones/$iuuid/root"
+
+function create_dataset {
+  echo "==> Creating dataset for image creation..."
+  zfs create zones/$iuuid
+  chmod 700 $zpath
+
+  mkdir $zpath/root
+  chmod 755 $zpath/root
+
+  mkdir $zpath/cores
+  chmod 755 $zpath/cores
+
+  echo "==> The dataset is zones/$iuuid"
+  echo "==>"
+}
+
+function install_tar {
+  echo "==> Installing the tar archive, this will take a few minutes..."
+  if ! ( cd "$zroot" && gtar --strip-components=2 "$gtaropts" "$tarball" ) ; then
+    echo "==> Error: extraction from tar archive failed."
+    zfs destroy -r zones/$iuuid
+  fi
+}
+
+
+function modify_image {
+  echo "==> Modifying the image to work in a zone..."
+
+  echo "====> Creating /native directories..."
+  mkdir -p $zroot/native/dev
+  mkdir -p $zroot/native/etc/default
+  mkdir -p $zroot/native/etc/svc/volatile
+  mkdir -p $zroot/native/lib
+  mkdir -p $zroot/native/proc
+  mkdir -p $zroot/native/tmp
+  chmod 1777 $zroot/native/tmp
+  mkdir -p $zroot/native/usr
+  mkdir -p $zroot/native/var
+  echo "====> done."
+  
+  # Create the /var/ld/ld.config files that will point to /native/lib for our
+  # Solaris libraries.
+  
+  echo "====> Creating the /var/ld/ld.config file..."
+  mkdir $zroot/var/ld
+  mkdir $zroot/var/ld/64
+
+if crle -c $zroot/var/ld/ld.config -l /native/lib:/native/usr/lib \
+  -s /native/lib/secure:/native/usr/lib/secure ; then
+  echo "====> Created \"$zroot/var/ld/ld.config\""
+else
+  echo "====> Creation of \"$zroot/var/ld/ld.config\" failed!"
+  exit 1
+fi
+
+if crle -64 -c $zroot/var/ld/64/ld.config \
+  -l /native/lib/amd64:/native/usr/lib/amd64 \
+  -s /native/lib/secure/amd64:/native/usr/lib/secure/amd64 ; then
+  echo "====> Created \"$zroot/var/ld/64/ld.config\""  
+else
+  echo "====> Creation of \"$zroot/var/ld/64/ld.config\" failed!"
+  exit 1
+fi
+
+  echo "====> Setting up fstab..."
+cat << EOF > $zroot/etc/fstab
+none		/			zfs	defaults	1 1
+proc		/proc			proc	defaults	0 0
+EOF
+  
+  echo "==> Image modification complete."
+}
+
+function create_file {
+  echo "==> Creating image file:"
+  
+  echo "====> Creating snapshot..."
+  zfs snapshot zones/$iuuid@final
+  
+  echo "====> Doing a zfs send. This may take a few minutes..."
+  zfs send zones/$iuuid@final | gzip -9 > ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz
+  echo "====> Done."
+  
+  echo "====> Cleaning up..."
+  zfs destroy -r zones/$iuuid
+  
+  echo "==> Image File created!"
+  echo "==>"
+}
+
+function create_manifest {
+  echo "==> Creating manifest file..."
+  ./create-manifest -f ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz -n lx-ubuntu-14.04 -v ${BUILD_DATE} -d "${IMAGE_NAME} ${BUILD_DATE} LX-brand BETA image." > ${IMAGE_NAME}-${BUILD_DATE}.json
+  echo "==> done!"
+  echo "==>"
+}
+
+function show_image_files {
+  echo "*** Image creation complete ***"
+  echo "==> Image files:"
+  echo "$(ls | grep $BUILD_DATE)"
+  echo ""
+}
+
+create_dataset
+install_tar
+modify_image
+create_file
+create_manifest
+show_image_files
+
+exit 0

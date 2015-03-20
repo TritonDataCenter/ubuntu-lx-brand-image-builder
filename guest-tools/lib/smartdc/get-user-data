@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+#
+# Copyright (c) 2014 Joyent Inc., All rights reserved.
+#
+# Get metadata user-data (via mdata-get)
+# This script is executed every boot and must be executed
+# before script "run-user-script"
+
+# load common functions and vars
+. /lib/smartdc/lib_smartdc_scripts.cfg
+
+lib_smartdc_info "Retrieving metadata user-data"
+
+if [[ ! -d /var/db ]]; then
+    mkdir -p /var/db
+fi
+
+$MDATA_GET_BIN user-data >/var/db/mdata-user-data.new
+case $? in
+  0)
+    lib_smartdc_info "Metadata user-data successfuly retrieved."
+    mv /var/db/mdata-user-data{.new,}
+    lib_smartdc_info "User-data saved to /var/db/mdata-user-data."
+    ;;
+  1)
+    lib_smartdc_info "Metadata user-data not defined."
+    rm -f /var/db/mdata-user-data{,.new}
+    ;;
+  *)
+    lib_smartdc_info "Metadata couldn't be retrieved."
+    exit 1
+    ;;
+esac
+
+exit 0
