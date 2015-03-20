@@ -66,10 +66,13 @@ Description: $NAME $BUILD_DATE.
 PRODUCT
 
 echo "==> Installing Guest tools in $INSTALL_DIR"
-#cp -r ./guest-tools/lib/smartdc $INSTALL_DIR/lib/
-cp -r ./guest-tools/usr/sbin/mdata-* $INSTALL_DIR/usr/sbin/
+chroot $INSTALL_DIR ln -s /native/usr/sbin/mdata-get /usr/sbin/mdata-get
+chroot $INSTALL_DIR ln -s /native/usr/sbin/mdata-put /usr/sbin/mdata-put
+chroot $INSTALL_DIR ln -s /native/usr/sbin/mdata-delete /usr/sbin/mdata-delete
+chroot $INSTALL_DIR ln -s /native/usr/sbin/mdata-list /usr/sbin/mdata-list
 cp -r ./guest-tools/usr/share/man/man1/mdata-* $INSTALL_DIR/usr/share/man/man1/
 cp ./guest-tools/lib/smartdc/joyent_rc.local $INSTALL_DIR/etc/rc.local
+
 echo "==> Done!"
 sleep 1 
 
