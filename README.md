@@ -6,7 +6,7 @@ This is a collectiong of scripts used for creating an LX-brand Debian image.
 
 In orer to use these scripts you'll need:
 
-- Ubuntu or Debian running in a VM or bare metal (required for the `install` script) 
+- Ubuntu (or Debian) running in a VM or bare metal (required for the `install` script) 
 - A SmartOS (or SDC headnode) install (required for the `create-lx-image` script)
 
 ## Usage
