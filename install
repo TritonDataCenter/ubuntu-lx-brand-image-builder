@@ -86,6 +86,10 @@ Description: $NAME $BUILD_DATE.
 PRODUCT
 
 echo "==> Installing Guest tools in $INSTALL_DIR"
+echo "====> Initiallizing and fetching submodule $GUESTTOOLS"
+git submodule init
+git submodule update
+echo "====> Running ./$GUESTTOOLS/install.sh -i $INSTALL_DIR"
 ./$GUESTTOOLS/install.sh -i $INSTALL_DIR
 
 
