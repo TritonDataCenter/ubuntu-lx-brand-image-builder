@@ -1,0 +1,3 @@
+[submodule "guesttools"]
+	path = guesttools
+	url = https://github.com/chorrell/sdc-vmtools-lxbrand.git
