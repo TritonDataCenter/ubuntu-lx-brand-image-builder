@@ -88,7 +88,7 @@ PRODUCT
 echo "==> Installing Guest tools in $INSTALL_DIR"
 echo "====> Initiallizing and fetching submodule $GUESTTOOLS"
 git submodule init
-git submodule update
+git submodule update --remote
 echo "====> Running ./$GUESTTOOLS/install.sh -i $INSTALL_DIR"
 ./$GUESTTOOLS/install.sh -i $INSTALL_DIR
 
