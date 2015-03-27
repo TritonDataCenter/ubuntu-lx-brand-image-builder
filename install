@@ -92,10 +92,6 @@ git submodule update
 echo "====> Running ./$GUESTTOOLS/install.sh -i $INSTALL_DIR"
 ./$GUESTTOOLS/install.sh -i $INSTALL_DIR
 
-
-echo "==> Done!"
-sleep 1 
-
 echo "==> Saving installation as $TARGET. This may take a few minutes."
 tar czf $TARGET --exclude-from=exclude.txt $INSTALL_DIR/
 
