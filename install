@@ -11,7 +11,7 @@ IFS=$'\n\t'
 INSTALL_DIR=/mnt/chroot
 NAME="Ubuntu 14.04 LX Brand"
 BUILD_DATE=$(date +%Y%m%d)
-DOCS="https://docs.joyent.com/images/lx-brand-beta/ubuntu"
+DOCS="https://docs.joyent.com/images/lx-brand-beta"
 TARGET="ubuntu-14.04-lx-${BUILD_DATE}.tar.gz"
 
 echo "==> Installing Ubuntu 14.04 into $INSTALL_DIR"
