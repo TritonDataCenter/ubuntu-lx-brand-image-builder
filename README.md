@@ -1,6 +1,6 @@
 # Ubuntu lx-brand Image Builder
 
-This is a collection of scripts used for creating an LX-brand Debian image.
+This is a collection of scripts used for creating an lx-brand Ubuntu image.
 
 ## Requirements
 
