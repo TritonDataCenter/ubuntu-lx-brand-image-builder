@@ -77,6 +77,21 @@ if [[ ! -e "$INSTALL_DIR" ]] ; then
   exit 1
 fi
 
+if [[ -z ${MIRROR} ]]; then
+  echo "Error: missing mirror (-m) value"
+  exit 1
+fi
+
+if [[ -z ${IMAGE_NAME} ]]; then
+  echo "Error: missing image name (-i) value"
+  exit 1
+fi
+
+if [[ -z ${NAME} ]]; then
+  echo "Error: missing proper name (-p) value"
+  exit 1
+fi
+
 TARGET="${IMAGE_NAME}-${BUILD_DATE}.tar.gz"
 
 if [[ -z ${DOCS} ]]; then
