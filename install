@@ -19,7 +19,7 @@ cat <<EOF
 
   Usage: $0 -d <chroot> -m <mirror>
   
-  Create an lx brand Ubuntu image from a given tar file
+   Install and modify Ubuntu in a given directory using a given mirror.
 
   Example:
   $0 -d /mnt/chroot -m http://archive.ubuntu.com/ubuntu/
