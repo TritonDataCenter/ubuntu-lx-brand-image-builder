@@ -67,7 +67,7 @@ fi
 
 echo "==> Installing Ubuntu 14.04 into $INSTALL_DIR"
 
-if [ -d $INSTALL_DIR ]; then
+if [[ -d $INSTALL_DIR ]]; then
   echo "====> Found previous install dicectory. Deleting and creating a new one."
   rm -rf $INSTALL_DIR
   mkdir -p $INSTALL_DIR
