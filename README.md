@@ -13,5 +13,5 @@ In order to use these scripts you'll need:
 
 ## Usage
 
-1. Run ./install under Ubuntu to install Ubuntu 14.04 in a directory. This will create a tarball of the installation in your working directory (named `ubuntu-14-lx-$YYMMDD.tar.gz`)
+1. Run ./install -d <chroot> -m <mirror> under Ubuntu to install Ubuntu 14.04 in a given directory. This will create a tarball of the installation in your working directory (named `ubuntu-14-lx-$YYMMDD.tar.gz`). See `./install -h` for usage
 2. Copy the tarball to a SmartOS machine or SDC headnode and run `./create-lx-image -t ubuntu-14-lx-$YYMMDD.tar.gz` (substituting the name of your tar file). This will create the image file and manifest.
