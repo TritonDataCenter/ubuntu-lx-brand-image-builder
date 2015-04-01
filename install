@@ -9,23 +9,23 @@ set -euo pipefail
 IFS=$'\n\t'
 
 GUESTTOOLS=guesttools
-NAME="Ubuntu 14.04 LX Brand"
 BUILD_DATE=$(date +%Y%m%d)
-TARGET="ubuntu-14.04-lx-${BUILD_DATE}.tar.gz"
 
 usage() {
 cat <<EOF
 
-  Usage: $0 -d <chroot> -m <mirror> -u <image docs>
+  Usage: $0 -d <chroot> -m <mirror> -i <image name> -p <proper name> -u <image docs>
   
    Install and modify Ubuntu in a given directory using a given mirror.
 
   Example:
-  $0 -d /mnt/chroot -m http://archive.ubuntu.com/ubuntu/ -u https://docs.joyent.com/images/lx-brand-beta
+  $0 -d /mnt/chroot -m http://archive.ubuntu.com/ubuntu/ -i lx-ubuntu-14.04 -p "Ubuntu 14.04 LX Brand" -u https://docs.joyent.com/images/lx-brand-beta
 
   OPTIONS:
   -d A path to the install directory
   -m A URL for the desired archive mirror
+  -i The name of the image. This is used for naming the tarball. 
+  -p The proper name of the image. Use quotes. This is used in the MOTD and /etc/product file. 
   -u A URL to the image docs [optional]
   -h Show this message
 
@@ -34,9 +34,11 @@ EOF
 
 INSTALL_DIR=
 MIRROR=
+IMAGE_NAME=
+NAME=
 DOCS=
 
-while getopts "hd:m:u" OPTION
+while getopts "hd:i:p:m:u" OPTION
 do
   case $OPTION in
     h)
@@ -48,6 +50,12 @@ do
       ;;
     m)
       MIRROR=${OPTARG}
+      ;;
+    i)
+      IMAGE_NAME=${OPTARG}
+      ;;
+    p)
+      NAME=${OPTARG}
       ;;
     u)
       DOCS=${OPTARG}
@@ -68,6 +76,8 @@ if [[ ! -e "$INSTALL_DIR" ]] ; then
   echo "Directory $INSTALL_DIR not found"
   exit 1
 fi
+
+TARGET="${IMAGE_NAME}-${BUILD_DATE}.tar.gz"
 
 if [[ -z ${DOCS} ]]; then
   DOCS="https://docs.joyent.com/images/lx-brand-beta"
