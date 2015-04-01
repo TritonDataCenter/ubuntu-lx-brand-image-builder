@@ -11,13 +11,12 @@ IFS=$'\n\t'
 GUESTTOOLS=guesttools
 NAME="Ubuntu 14.04 LX Brand"
 BUILD_DATE=$(date +%Y%m%d)
-DOCS="https://docs.joyent.com/images/lx-brand-beta"
 TARGET="ubuntu-14.04-lx-${BUILD_DATE}.tar.gz"
 
 usage() {
 cat <<EOF
 
-  Usage: $0 -d <chroot> -m <mirror>
+  Usage: $0 -d <chroot> -m <mirror> -u <image docs>
   
    Install and modify Ubuntu in a given directory using a given mirror.
 
@@ -27,6 +26,7 @@ cat <<EOF
   OPTIONS:
   -d A path to the install directory
   -m A URL for the desired archive mirror
+  -u A URL to the image docs
   -h Show this message
 
 EOF
@@ -34,8 +34,9 @@ EOF
 
 INSTALL_DIR=
 MIRROR=
+DOCS=
 
-while getopts "hd:m:" OPTION
+while getopts "hd:m:u" OPTION
 do
   case $OPTION in
     h)
@@ -47,6 +48,9 @@ do
       ;;
     m)
       MIRROR=${OPTARG}
+      ;;
+    u)
+      DOCS=${OPTARG}
       ;;
     ?)
       usage
@@ -63,6 +67,10 @@ fi
 if [[ ! -e "$INSTALL_DIR" ]] ; then
   echo "Directory $INSTALL_DIR not found"
   exit 1
+fi
+
+if [[ -z ${DOCS} ]]; then
+  DOCS="https://docs.joyent.com/images/lx-brand-beta"
 fi
 
 echo "==> Installing Ubuntu 14.04 into $INSTALL_DIR"
