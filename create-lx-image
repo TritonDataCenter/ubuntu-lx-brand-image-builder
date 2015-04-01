@@ -11,7 +11,7 @@ BUILD_DATE=$(date +%Y%m%d)
 IMAGE_NAME="ubuntu-14.04-lx"
 tarball=
 iuuid=$(uuid -v4)
-iuuid=ubuntu-14.04-$BUILD_DATE
+iuuid=${IMAGE_NAME}-$BUILD_DATE
 
 usage() {
 cat <<EOF
