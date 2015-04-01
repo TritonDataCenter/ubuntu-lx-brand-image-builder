@@ -60,7 +60,7 @@ do
     u)
       DOCS=${OPTARG}
       ;;
-    ?)
+    \?)
       usage
       exit
       ;;
