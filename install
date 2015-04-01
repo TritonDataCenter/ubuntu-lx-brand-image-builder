@@ -8,18 +8,67 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-INSTALL_DIR=/mnt/chroot
-MIRROR=http://us-east-1.joyent.archive.ubuntu.com/ubuntu/
 GUESTTOOLS=guesttools
 NAME="Ubuntu 14.04 LX Brand"
 BUILD_DATE=$(date +%Y%m%d)
 DOCS="https://docs.joyent.com/images/lx-brand-beta"
 TARGET="ubuntu-14.04-lx-${BUILD_DATE}.tar.gz"
 
+usage() {
+cat <<EOF
+
+  Usage: $0 -d <chroot> -m <mirror>
+  
+  Create an lx brand Ubuntu image from a given tar file
+
+  Example:
+  $0 -d /mnt/chroot -m http://archive.ubuntu.com/ubuntu/
+
+  OPTIONS:
+  -d A path to the install directory
+  -m A URL for the desired archive mirror
+  -h Show this message
+
+EOF
+}
+
+INSTALL_DIR=
+MIRROR=
+
+while getopts "hd:m:" OPTION
+do
+  case $OPTION in
+    h)
+      usage
+      exit
+      ;;
+    d)
+      INSTALL_DIR=${OPTARG%/}
+      ;;
+    m)
+      MIRROR=${OPTARG}
+      ;;
+    ?)
+      usage
+      exit
+      ;;
+  esac
+done
+
+if [[ $# -eq 0 ]]; then
+  usage
+  exit 1
+fi
+
+if [[ ! -e "$INSTALL_DIR" ]] ; then
+  echo "Directory $INSTALL_DIR not found"
+  exit 1
+fi
+
 echo "==> Installing Ubuntu 14.04 into $INSTALL_DIR"
 
 if [ -d $INSTALL_DIR ]; then
-  echo "====> Found previous chroot. Deleting and creating a new one."
+  echo "====> Found previous install dicectory. Deleting and creating a new one."
   rm -rf $INSTALL_DIR
   mkdir -p $INSTALL_DIR
 fi
