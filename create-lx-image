@@ -174,7 +174,7 @@ create_file() {
   zfs send zones/$iuuid@final | gzip -9 > ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz
   echo "====> Done."
   
-  sleep 10
+  sleep 15
   
   echo "====> Cleaning up..."
   zfs destroy -r zones/$iuuid
