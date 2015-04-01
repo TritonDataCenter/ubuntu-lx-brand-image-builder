@@ -91,7 +91,7 @@ gtaropts="${gtaropts}f"
 zpath="/zones/$iuuid"
 zroot="/zones/$iuuid/root"
 
-create_dataset {
+create_dataset() {
   echo "==> Creating dataset for image creation..."
   zfs create zones/$iuuid
   chmod 700 $zpath
@@ -106,7 +106,7 @@ create_dataset {
   echo "==>"
 }
 
-install_tar {
+install_tar() {
   echo "==> Installing the tar archive, this will take a few minutes..."
   cd "$zroot" && gtar --strip-components=2 "$gtaropts" "$tarball"
   if [[ "$?" -ne "0" ]] ; then
@@ -116,7 +116,7 @@ install_tar {
 }
 
 
-modify_image {
+modify_image() {
   echo "==> Modifying the image to work in a zone..."
 
   echo "====> Creating /native directories..."
@@ -164,7 +164,7 @@ EOF
   echo "==> Image modification complete."
 }
 
-create_file {
+create_file() {
   echo "==> Creating image file:"
   
   echo "====> Creating snapshot..."
@@ -181,14 +181,14 @@ create_file {
   echo "==>"
 }
 
-create_manifest {
+create_manifest() {
   echo "==> Creating manifest file..."
   ./create-manifest -f ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz -n ${IMAGE_NAME} -v ${BUILD_DATE} -d "${IMAGE_NAME} ${BUILD_DATE} LX-brand BETA image." -h https://docs.joyent.com/images/lx-brand-beta/ubuntu > ${IMAGE_NAME}-${BUILD_DATE}.json
   echo "==> done!"
   echo "==>"
 }
 
-show_image_files {
+show_image_files() {
   echo "*** Image creation complete ***"
   echo "==> Image files:"
   echo "$(ls | grep $BUILD_DATE)"
