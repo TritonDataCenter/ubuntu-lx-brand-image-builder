@@ -26,7 +26,7 @@ cat <<EOF
   OPTIONS:
   -d A path to the install directory
   -m A URL for the desired archive mirror
-  -u A URL to the image docs
+  -u A URL to the image docs [optional]
   -h Show this message
 
 EOF
