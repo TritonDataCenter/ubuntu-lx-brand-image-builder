@@ -8,7 +8,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 BUILD_DATE=$(date +%Y%m%d)
-IMAGE_NAME="ubuntu-14.04-lx"
+IMAGE_NAME="lx-ubuntu-14.04"
 tarball=
 iuuid=$(uuid -v4)
 iuuid=${IMAGE_NAME}-$BUILD_DATE
@@ -183,7 +183,7 @@ create_file {
 
 create_manifest {
   echo "==> Creating manifest file..."
-  ./create-manifest -f ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz -n lx-ubuntu-14.04 -v ${BUILD_DATE} -d "${IMAGE_NAME} ${BUILD_DATE} LX-brand BETA image." -h https://docs.joyent.com/images/lx-brand-beta/ubuntu > ${IMAGE_NAME}-${BUILD_DATE}.json
+  ./create-manifest -f ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz -n ${IMAGE_NAME} -v ${BUILD_DATE} -d "${IMAGE_NAME} ${BUILD_DATE} LX-brand BETA image." -h https://docs.joyent.com/images/lx-brand-beta/ubuntu > ${IMAGE_NAME}-${BUILD_DATE}.json
   echo "==> done!"
   echo "==>"
 }
