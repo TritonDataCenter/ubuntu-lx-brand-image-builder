@@ -21,7 +21,7 @@ cat <<EOF
    Install and modify Ubuntu in a given directory using a given mirror.
 
   Example:
-  $0 -d /mnt/chroot -m http://archive.ubuntu.com/ubuntu/
+  $0 -d /mnt/chroot -m http://archive.ubuntu.com/ubuntu/ -u https://docs.joyent.com/images/lx-brand-beta
 
   OPTIONS:
   -d A path to the install directory
