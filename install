@@ -72,7 +72,7 @@ if [[ $# -eq 0 ]]; then
   exit 1
 fi
 
-if [[ ! -e "$INSTALL_DIR" ]] ; then
+if [[ ! -e ${INSTALL_DIR} ]] ; then
   echo "Directory $INSTALL_DIR not found"
   exit 1
 fi
