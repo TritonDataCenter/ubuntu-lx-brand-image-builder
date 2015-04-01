@@ -9,6 +9,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 INSTALL_DIR=/mnt/chroot
+MIRROR=http://archive.ubuntu.com/ubuntu/
 GUESTTOOLS=guesttools
 NAME="Ubuntu 14.04 LX Brand"
 BUILD_DATE=$(date +%Y%m%d)
@@ -23,7 +24,7 @@ if [ -d $INSTALL_DIR ]; then
   mkdir -p $INSTALL_DIR
 fi
 
-debootstrap trusty $INSTALL_DIR http://archive.ubuntu.com/ubuntu/
+debootstrap trusty $INSTALL_DIR $MIRROR
 echo "==> Done!"
 
 echo "==> Setting locale to en_US.UTF-8"
