@@ -38,7 +38,7 @@ IMAGE_NAME=
 NAME=
 DOCS=
 
-while getopts "hd:i:p:m:u" OPTION
+while getopts "hd:m:i:p:u" OPTION
 do
   case $OPTION in
     h)
