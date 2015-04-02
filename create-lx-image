@@ -167,21 +167,15 @@ EOF
 create_file() {
   echo "==> Creating image file:"
   
-  sleep 15
-  
   echo "====> Creating snapshot..."
   zfs snapshot zones/$iuuid@final
-  
-  sleep 15
   
   echo "====> Doing a zfs send. This may take a few minutes..."
   zfs send zones/$iuuid@final | gzip -9 > ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz
   echo "====> Done."
   
-  sleep 15
-  
   echo "====> Cleaning up..."
-  zfs destroy -r zones/$iuuid
+  zfs destroy -fr zones/$iuuid
   
   echo "==> Image File created!"
   echo "==>"
