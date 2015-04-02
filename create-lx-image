@@ -176,7 +176,7 @@ create_file() {
   echo "====> Done."
   
   echo "====> Cleaning up..."
-  zfs destroy -fr zones/$iuuid
+  zfs destroy -r zones/$iuuid
   
   echo "==> Image File created!"
   echo "==>"
