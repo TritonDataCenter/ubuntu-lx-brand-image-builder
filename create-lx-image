@@ -13,7 +13,7 @@ TARBALL=
 IMAGE_NAME=
 DESC=
 DOCS=
-iuuid=${IMAGE_NAME}-$BUILD_DATE
+
 
 usage() {
 cat <<EOF
@@ -86,6 +86,22 @@ if [[ ! -f "$TARBALL" ]]; then
   echo "==> ERROR: must be a gzip, bzip2, .Z or uncompressed tar archive"
   exit 1
 fi
+
+if [[ -z ${IMAGE_NAME} ]]; then
+  echo "Error: missing image name (-i) value"
+  exit 1
+fi
+
+if [[ -z ${DESC} ]]; then
+  cho "Error: missing image description (-d) value"
+    exit 1
+fi
+
+if [[ -z ${DOCS} ]]; then
+  DOCS="https://docs.joyent.com/images/lx-brand-beta"
+fi
+
+iuuid=${IMAGE_NAME}-$BUILD_DATE
 
 filetype=$({ LC_ALL=C file $TARBALL | awk '{print $2}' ; } 2>/dev/null)
 
