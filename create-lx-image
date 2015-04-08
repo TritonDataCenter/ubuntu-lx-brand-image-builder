@@ -5,7 +5,6 @@
 # Create an lx-brand image from a given tar file
 
 set -euo pipefail
-set -o xtrace
 IFS=$'\n\t'
 
 BUILD_DATE=$(date +%Y%m%d)
