@@ -9,26 +9,33 @@ set -o xtrace
 IFS=$'\n\t'
 
 BUILD_DATE=$(date +%Y%m%d)
-IMAGE_NAME="lx-ubuntu-14.04"
-tarball=
+TARBALL=
+IMAGE_NAME=
+DESC=
+DOCS=
 iuuid=$(uuid -v4)
 iuuid=${IMAGE_NAME}-$BUILD_DATE
 
 usage() {
 cat <<EOF
 
-  Usage: $0 -t {path to archive}
+  Usage: $0 -t <TARBALL> -i <IMAGE_NAME> -d <DESC> -u <DOCS>
 
   Create an lx brand Ubuntu image from a given tar file
+  
+  Example: $0 -t /var/tmp/lx-ubuntu-14.04-20150408.tar.gz -i lx-ubuntu-14.04 -d "Ubuntu 14.04 lx 64-bit lx-brand image." -u https://docs.joyent.com/images/lx-brand-beta
 
   OPTIONS:
   -t The path to the tar archive
+  -i The name of the image as it would appear in the manifest
+  -d The description of the image as it would appear in the manifest
+  -u The homepage link of the image as it would appear in the manifest
   -h Show this message
 
 EOF
 }
 
-while getopts "ht:" OPTION
+while getopts "ht:i:d:u:" OPTION
 do
   case $OPTION in
     h)
@@ -36,7 +43,16 @@ do
       exit 1
       ;;
     t)
-      tarball="$OPTARG"
+      TARBALL="$OPTARG"
+      ;;
+    i)
+      IMAGE_NAME=${OPTARG}
+      ;;
+    d)
+      DESC=${OPTARG}
+      ;;
+    u)
+      DOCS=${OPTARG}
       ;;
     ?)
       usage
@@ -46,33 +62,33 @@ do
 done
 
 
-if [[ -z $tarball ]]; then
+if [[ -z $TARBALL ]]; then
   echo "==> ERROR: the install archive is required"
   usage
   exit 1
 fi
 
-if [[ ! -a "$tarball" ]]; then
-  printf "==> ERROR: %s: file or directory not found\n" $tarball
+if [[ ! -a "$TARBALL" ]]; then
+  printf "==> ERROR: %s: file or directory not found\n" $TARBALL
   exit 1
 fi
 
-if [[ "$(echo $tarball | cut -c 1)" != "/" ]]; then
-  printf "==> Pathname '%s' specified to -t must be absolute\n" $tarball
+if [[ "$(echo $TARBALL | cut -c 1)" != "/" ]]; then
+  printf "==> Pathname '%s' specified to -t must be absolute\n" $TARBALL
   exit 1
 fi
 
-if [[ ! -r "$tarball" ]]; then
-  printf "==> Cannot read file '%s'\n" $tarball
+if [[ ! -r "$TARBALL" ]]; then
+  printf "==> Cannot read file '%s'\n" $TARBALL
   exit 1
 fi
 
-if [[ ! -f "$tarball" ]]; then
+if [[ ! -f "$TARBALL" ]]; then
   echo "==> ERROR: must be a gzip, bzip2, .Z or uncompressed tar archive"
   exit 1
 fi
 
-filetype=$({ LC_ALL=C file $tarball | awk '{print $2}' ; } 2>/dev/null)
+filetype=$({ LC_ALL=C file $TARBALL | awk '{print $2}' ; } 2>/dev/null)
 
 if [[ "$filetype" = "gzip" ]]; then
   gtaropts="-xz"
@@ -109,7 +125,7 @@ create_dataset() {
 
 install_tar() {
   echo "==> Installing the tar archive, this will take a few minutes..."
-  ( cd "$zroot" && gtar --strip-components=2 "$gtaropts" "$tarball" )
+  ( cd "$zroot" && gtar --strip-components=2 "$gtaropts" "$TARBALL" )
   if [[ "$?" -ne "0" ]] ; then
     echo "==> Error: extraction from tar archive failed."
     zfs destroy -r zones/$iuuid
@@ -184,7 +200,7 @@ create_file() {
 
 create_manifest() {
   echo "==> Creating manifest file..."
-  ./create-manifest -f ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz -n ${IMAGE_NAME} -v ${BUILD_DATE} -d "${IMAGE_NAME} ${BUILD_DATE} LX-brand BETA image." -h https://docs.joyent.com/images/lx-brand-beta/ubuntu > ${IMAGE_NAME}-${BUILD_DATE}.json
+  ./create-manifest -f ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz -n ${IMAGE_NAME} -v ${BUILD_DATE} -d ${DESC} -h ${DOCS} > ${IMAGE_NAME}-${BUILD_DATE}.json
   echo "==> done!"
   echo "==>"
 }
