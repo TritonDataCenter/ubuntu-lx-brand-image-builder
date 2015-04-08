@@ -2,8 +2,11 @@
 #
 # Copyright (c) 2015 Joyent Inc., All rights reserved.
 #
+# Create an image manifest for a given image file
 
-set -o errexit
+
+set -euo pipefail
+IFS=$'\n\t'
 
 now=$(date -u +%Y-%m-%dT%TZ)
 vm_uuid=$(uuid)
