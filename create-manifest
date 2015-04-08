@@ -34,8 +34,9 @@ USAGE
   exit 1
 }
 
-while getopts d:f:k:n:o:v:h:? c; do
-  case ${c} in
+while getopts d:f:k:n:o:v:h:? OPTION
+do
+  case $OPTION in
   d)
       description=${OPTARG}
       ;;
