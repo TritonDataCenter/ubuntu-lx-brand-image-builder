@@ -24,7 +24,7 @@ cat <<EOF
   Example: $0 -t /var/tmp/lx-ubuntu-14.04-20150408.tar.gz -i lx-ubuntu-14.04 -d "Ubuntu 14.04 lx 64-bit lx-brand image." -u https://docs.joyent.com/images/lx-brand-beta
 
   OPTIONS:
-  -t The path to the tar archive
+  -t The full path to the tar archive
   -i The name of the image as it would appear in the manifest
   -d The description of the image as it would appear in the manifest
   -u The homepage link of the image as it would appear in the manifest
