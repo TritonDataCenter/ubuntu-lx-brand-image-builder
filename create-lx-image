@@ -13,7 +13,6 @@ TARBALL=
 IMAGE_NAME=
 DESC=
 DOCS=
-iuuid=$(uuid -v4)
 iuuid=${IMAGE_NAME}-$BUILD_DATE
 
 usage() {
