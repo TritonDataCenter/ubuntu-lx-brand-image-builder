@@ -56,6 +56,9 @@ do
   k)
       kernel=${OPTARG}
       ;;
+  m)
+      min_platform=${OPTARG}
+      ;;
   n)
       name=${OPTARG}
       ;;
