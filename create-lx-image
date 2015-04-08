@@ -9,6 +9,8 @@ IFS=$'\n\t'
 
 BUILD_DATE=$(date +%Y%m%d)
 TARBALL=
+KERNEL=
+MIN_PLATFORM=
 IMAGE_NAME=
 DESC=
 DOCS=
@@ -17,14 +19,16 @@ DOCS=
 usage() {
 cat <<EOF
 
-  Usage: $0 -t <TARBALL> -i <IMAGE_NAME> -d <DESC> -u <DOCS>
+  Usage: $0 -t <TARBALL> -k <KERNEL> -m <MIN_PLATFORM> -i <IMAGE_NAME> -d <DESC> -u <DOCS>
 
   Create an lx brand Ubuntu image from a given tar file
   
-  Example: $0 -t /var/tmp/lx-ubuntu-14.04-20150408.tar.gz -i lx-ubuntu-14.04 -d "Ubuntu 14.04 lx 64-bit lx-brand image." -u https://docs.joyent.com/images/lx-brand-beta
+  Example: $0 -t /var/tmp/lx-ubuntu-14.04-20150408.tar.gz -k 3.13.0 -m 20150316T201553Z -i lx-ubuntu-14.04 -d "Ubuntu 14.04 lx 64-bit lx-brand image." -u https://docs.joyent.com/images/lx-brand-beta
 
   OPTIONS:
   -t The full path to the tar archive
+  -k The kernel version
+  -m The minimum platform required for the image
   -i The name of the image as it would appear in the manifest
   -d The description of the image as it would appear in the manifest
   -u The homepage link of the image as it would appear in the manifest
@@ -33,7 +37,7 @@ cat <<EOF
 EOF
 }
 
-while getopts "ht:i:d:u:" OPTION
+while getopts "ht:k:m:i:d:u:" OPTION
 do
   case $OPTION in
     h)
@@ -42,6 +46,12 @@ do
       ;;
     t)
       TARBALL="$OPTARG"
+      ;;
+    k)
+      KERNEL="$OPTARG"
+      ;;
+    m)
+      MIN_PLATFORM="$OPTARG"
       ;;
     i)
       IMAGE_NAME=${OPTARG}
@@ -83,6 +93,16 @@ fi
 
 if [[ ! -f "$TARBALL" ]]; then
   echo "==> ERROR: must be a gzip, bzip2, .Z or uncompressed tar archive"
+  exit 1
+fi
+
+if [[ -z ${KERNEL} ]]; then
+  echo "Error: missing kernel version (-k) value"
+  exit 1
+fi
+
+if [[ -z ${MIN_PLATFORM} ]]; then
+  echo "Error: missing minimum platform (-m) value"
   exit 1
 fi
 
@@ -214,7 +234,7 @@ create_file() {
 
 create_manifest() {
   echo "==> Creating manifest file..."
-  ./create-manifest -f ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz -n ${IMAGE_NAME} -v ${BUILD_DATE} -d ${DESC} -h ${DOCS} > ${IMAGE_NAME}-${BUILD_DATE}.json
+  ./create-manifest -f ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz -k ${KERNEL} -m ${MIN_PLATFORM} -n ${IMAGE_NAME} -v ${BUILD_DATE} -d ${DESC} -h ${DOCS} > ${IMAGE_NAME}-${BUILD_DATE}.json
   echo "==> done!"
   echo "==>"
 }
