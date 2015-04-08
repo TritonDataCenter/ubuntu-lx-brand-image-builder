@@ -14,75 +14,75 @@ SUM=/usr/bin/sum
 
 usage()
 {
-    cat <<USAGE
+  cat <<USAGE
 Usage: $0 -f <filename> -k <kernel_version> -m <min_platform> -n <name> -v <version>
 
-    -d <image description> (optional, default: "<NAME> <VERSION> VM Image")
-    -f <filename of VM image> (required)
-    -k <kernel version for the VM image> (required)
-    -m <min_platform> (required)
-    -n <name of VM image> (required)
-    -o <the os of VM image> (optional, default: "other")
-    -v <version of VM image> (required)
-    -h <homepage link> (optional)
+  -d <image description> (optional, default: "<NAME> <VERSION> VM Image")
+  -f <filename of VM image> (required)
+  -k <kernel version for the VM image> (required)
+  -m <min_platform> (required)
+  -n <name of VM image> (required)
+  -o <the os of VM image> (optional, default: "other")
+  -v <version of VM image> (required)
+  -h <homepage link> (optional)
 
 Example:
 
-    $0 -f ubuntu-14.04.20150319.zfs.gz -k 3.13.0 -m 20150316T201553Z -n lx-ubuntu-14.04 -v 20150319
+  $0 -f ubuntu-14.04.20150319.zfs.gz -k 3.13.0 -m 20150316T201553Z -n lx-ubuntu-14.04 -v 20150319
 
 USAGE
-    exit 1
+  exit 1
 }
 
 while getopts d:f:k:n:o:v:h:? c; do
-    case ${c} in
-    d)
-        description=${OPTARG}
-        ;;
-    f)
-        filename=${OPTARG}
-        ;;
-    k)
-        kernel=${OPTARG}
-        ;;
-    n)
-        name=${OPTARG}
-        ;;
-    o)
-        os=${OPTARG}
-        ;;
-    v)
-        version=${OPTARG}
-        ;;
-    h)
-        homepage=${OPTARG}
-        ;;
-    \?)
-        usage
-        ;;
-    esac
+  case ${c} in
+  d)
+      description=${OPTARG}
+      ;;
+  f)
+      filename=${OPTARG}
+      ;;
+  k)
+      kernel=${OPTARG}
+      ;;
+  n)
+      name=${OPTARG}
+      ;;
+  o)
+      os=${OPTARG}
+      ;;
+  v)
+      version=${OPTARG}
+      ;;
+  h)
+      homepage=${OPTARG}
+      ;;
+  \?)
+      usage
+      ;;
+  esac
 done
 
 if [[ -z ${filename} || -z ${kernel} || -z ${min_platform} || -z ${name} || -z ${version} ]]; then
-    echo "FATAL: All of -f, -n and -v are required."
-    usage
+  echo "FATAL: All of -f, -n and -v are required."
+  usage
 fi
 
 if [[ -z ${description} ]]; then
-    description="${name} ${version} LX-brand image"
+  description="${name} ${version} LX-brand image"
 fi
 
 if [[ -z ${os} ]]; then
-    os="other"
+  os="other"
 fi
 
 if [[ -z ${homepage} ]]; then
-    homepage=https://docs.joyent.com/images
+  homepage=https://docs.joyent.com/images
 fi
 
 if [[ ! -f ${filename} ]]; then
-    echo "FATAL: ${filename} does not exist."
-    usage
+  echo "FATAL: ${filename} does not exist."
+  usage
 fi
 
 shasum=$($SUM -x sha1 ${filename} | cut -d' ' -f1)
