@@ -19,13 +19,15 @@ DOCS=
 usage() {
 cat <<EOF
 
-  Usage: $0 -t <TARBALL> -k <KERNEL> -m <MIN_PLATFORM> -i <IMAGE_NAME> -d <DESC> -u <DOCS>
+Create an lx brand Ubuntu image from a given tar file
 
-  Create an lx brand Ubuntu image from a given tar file
-  
-  Example: $0 -t /var/tmp/lx-ubuntu-14.04-20150408.tar.gz -k 3.13.0 -m 20150316T201553Z -i lx-ubuntu-14.04 -d "Ubuntu 14.04 lx 64-bit lx-brand image." -u https://docs.joyent.com/images/lx-brand-beta
+Usage:
+  $0 -t <TARBALL> -k <KERNEL> -m <MIN_PLATFORM> -i <IMAGE_NAME> -d <DESC> -u <DOCS>
 
-  OPTIONS:
+Example:
+  $0 -t /var/tmp/lx-ubuntu-14.04-20150408.tar.gz -k 3.13.0 -m 20150316T201553Z -i lx-ubuntu-14.04 -d "Ubuntu 14.04 lx 64-bit lx-brand image." -u https://docs.joyent.com/images/lx-brand-beta
+
+OPTIONS:
   -t The full path to the tar archive
   -k The kernel version
   -m The minimum platform required for the image

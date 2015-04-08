@@ -14,14 +14,15 @@ BUILD_DATE=$(date +%Y%m%d)
 usage() {
 cat <<EOF
 
-  Usage: $0 -r <RELEASE> -d <INSTALL_DIR> -m <MIRROR> -i <IMAGE_NAME> -p <NAME> -u <DOCS>
-  
-   Install and modify Ubuntu in a given directory using a given mirror.
+Install and modify Ubuntu in a given directory using a given mirror.
 
-  Example:
+Usage:
+  $0 -r <RELEASE> -d <INSTALL_DIR> -m <MIRROR> -i <IMAGE_NAME> -p <NAME> -u <DOCS>
+
+Example:
   $0 -r trusty -d /mnt/chroot -m http://archive.ubuntu.com/ubuntu/ -i lx-ubuntu-14.04 -p "Ubuntu 14.04 LX Brand" -u https://docs.joyent.com/images/lx-brand-beta
 
-  OPTIONS:
+OPTIONS:
   -r The desired release (e.g "trusty")
   -d A path to the install directory
   -m A URL for the desired archive mirror

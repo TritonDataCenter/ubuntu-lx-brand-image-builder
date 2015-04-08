@@ -11,12 +11,22 @@ IFS=$'\n\t'
 now=$(date -u +%Y-%m-%dT%TZ)
 vm_uuid=$(uuid)
 SUM=/usr/bin/sum
+filename=
+kernel=
+min_platform=
+name=
+version=
 
 usage()
 {
   cat <<USAGE
-Usage: $0 -f <filename> -k <kernel_version> -m <min_platform> -n <name> -v <version>
 
+Create an image manifest from a given image file
+
+Usage:
+  $0 -f <filename> -k <kernel_version> -m <min_platform> -n <name> -v <version>
+
+OPTIONS:
   -d <image description> (optional, default: "<NAME> <VERSION> VM Image")
   -f <filename of VM image> (required)
   -k <kernel version for the VM image> (required)
