@@ -12,23 +12,25 @@ SUM=/usr/bin/sum
 usage()
 {
     cat <<USAGE
-Usage: $0 -f filename -n <name> -v <version> [options]
+Usage: $0 -f <filename> -m <min_platform> -n <name> -v <version>
 
     -d <image description> (optional, default: "<NAME> <VERSION> VM Image")
     -f <filename of VM image> (required)
+    -m <min_platform> (required)
     -n <name of VM image> (required)
+    -o <the os of VM image> (optional, default: "other")
     -v <version of VM image> (required)
     -h <homepage link> (optional)
 
 Example:
 
-    $0 -f ubuntu-14.04.20150319.zfs.gz -n lx-ubuntu-14.04-v 20150319
+    $0 -f ubuntu-14.04.20150319.zfs.gz -m <min_platform> -n lx-ubuntu-14.04 -v 20150319
 
 USAGE
     exit 1
 }
 
-while getopts d:f:n:v:h:? c; do
+while getopts d:f:n:o:v:h:? c; do
     case ${c} in
     d)
         description=${OPTARG}
@@ -38,6 +40,9 @@ while getopts d:f:n:v:h:? c; do
         ;;
     n)
         name=${OPTARG}
+        ;;
+    o)
+        os=${OPTARG}
         ;;
     v)
         version=${OPTARG}
@@ -51,7 +56,7 @@ while getopts d:f:n:v:h:? c; do
     esac
 done
 
-if [[ -z ${filename} || -z ${name} || -z ${version} ]]; then
+if [[ -z ${filename} | -z ${min_platform} || -z ${name} || -z ${version} ]]; then
     echo "FATAL: All of -f, -n and -v are required."
     usage
 fi
@@ -60,6 +65,9 @@ if [[ -z ${description} ]]; then
     description="${name} ${version} LX-brand image"
 fi
 
+if [[ -z ${os} ]]; then
+    os="other"
+fi
 
 if [[ -z ${homepage} ]]; then
     homepage=https://docs.joyent.com/images
@@ -82,7 +90,7 @@ cat <<EOF
   "description": "${description}",
   "homepage": "${homepage}",
   "published_at": "${now}",
-  "os": "other",
+  "os": "${os}",
   "files": [
     {
       "sha1": "${shasum}",
@@ -98,7 +106,7 @@ cat <<EOF
       }
     ],
     "min_platform": {
-         "7.0": "20150316T201553Z"
+         "7.0": "${min_platform}"
        }
   },
   "uuid": "${vm_uuid}",
