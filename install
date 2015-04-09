@@ -18,10 +18,10 @@ cat <<EOF
 Install and modify Ubuntu in a given directory using a given mirror.
 
 Usage:
-  $0 -r <RELEASE> -d <INSTALL_DIR> -m <MIRROR> -i <IMAGE_NAME> -p <NAME> -D <DESC> -u <DOCS>
+  $0 -r <RELEASE> -d <INSTALL_DIR> -m <MIRROR> -i <IMAGE_NAME> -p <NAME> -s <DESC> -u <DOCS>
 
 Example:
-  $0 -r trusty -d /mnt/chroot -m http://archive.ubuntu.com/ubuntu/ -i lx-ubuntu-14.04 -p "Ubuntu 14.04 LX Brand" -D "Ubuntu 14.04 lx 64-bit lx-brand image." -u https://docs.joyent.com/images/lx-brand-beta
+  $0 -r trusty -d /mnt/chroot -m http://archive.ubuntu.com/ubuntu/ -i lx-ubuntu-14.04 -p "Ubuntu 14.04 LX Brand" -s "Ubuntu 14.04 lx 64-bit lx-brand image." -u https://docs.joyent.com/images/lx-brand-beta
 
 OPTIONS:
   -r The desired release (e.g "trusty")
@@ -29,7 +29,7 @@ OPTIONS:
   -m A URL for the desired archive mirror
   -i The name of the image. This is used for naming the tarball. 
   -p The proper name of the image. Use quotes. This is used in the MOTD and /etc/product file.
-  -D A description for the image. This is used in the image manifest and the /etc/product file.
+  -s A description for the image. This is used in the image manifest and the /etc/product file.
   -u A URL to the image docs [optional]
   -h Show this message
 
@@ -44,7 +44,7 @@ NAME=
 DESC=
 DOCS=
 
-while getopts "hr:d:m:i:p:D:u:" OPTION
+while getopts "hr:d:m:i:p:s:u:" OPTION
 do
   case $OPTION in
     h)
@@ -66,7 +66,7 @@ do
     p)
       NAME=${OPTARG}
       ;;
-    D)
+    s)
       DESC=${OPTARG}
       ;;
     u)
@@ -115,7 +115,7 @@ if [[ -z ${NAME} ]]; then
 fi
 
 if [[ -z ${DESC} ]]; then
-  echo "Error: missing image description (-D) value"
+  echo "Error: missing image description (-s) value"
   exit 1
 fi
 
