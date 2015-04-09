@@ -11,11 +11,14 @@ IFS=$'\n\t'
 now=$(date -u +%Y-%m-%dT%TZ)
 vm_uuid=$(uuid)
 SUM=/usr/bin/sum
+description=
 filename=
 kernel=
 min_platform=
 name=
+os=
 version=
+homepage=
 
 usage()
 {
