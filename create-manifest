@@ -44,7 +44,7 @@ USAGE
   exit 1
 }
 
-while getopts d:f:k:n:o:v:h:? OPTION
+while getopts d:f:k:m:n:o:v:h:? OPTION
 do
   case $OPTION in
   d)
