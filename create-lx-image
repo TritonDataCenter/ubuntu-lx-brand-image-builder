@@ -47,13 +47,13 @@ do
       exit 1
       ;;
     t)
-      TARBALL="$OPTARG"
+      TARBALL=${OPTARG}
       ;;
     k)
-      KERNEL="$OPTARG"
+      KERNEL=${OPTARG}
       ;;
     m)
-      MIN_PLATFORM="$OPTARG"
+      MIN_PLATFORM=${OPTARG}
       ;;
     i)
       IMAGE_NAME=${OPTARG}
