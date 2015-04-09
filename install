@@ -64,7 +64,7 @@ do
       IMAGE_NAME="${OPTARG}"
       ;;
     p)
-      NAME="${OPTARG}"
+      NAME="$OPTARG"
       ;;
     D)
       DESC="${OPTARG}"
