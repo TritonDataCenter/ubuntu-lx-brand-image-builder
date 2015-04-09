@@ -181,7 +181,7 @@ cat << PRODUCT > $INSTALL_DIR/etc/product
 Name: Joyent Instance
 Image: $NAME $BUILD_DATE
 Documentation: $DOCS
-Description: $NAME $BUILD_DATE.
+Description: $DESC
 PRODUCT
 
 echo "==> Installing Guest tools in $INSTALL_DIR"
