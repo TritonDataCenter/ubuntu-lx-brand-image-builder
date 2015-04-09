@@ -52,25 +52,25 @@ do
       exit
       ;;
     r)
-      RELEASE=${OPTARG}
+      RELEASE="${OPTARG}"
       ;;
     d)
-      INSTALL_DIR=${OPTARG%/}
+      INSTALL_DIR="${OPTARG%/}"
       ;;
     m)
-      MIRROR=${OPTARG}
+      MIRROR="${OPTARG}"
       ;;
     i)
-      IMAGE_NAME=${OPTARG}
+      IMAGE_NAME="${OPTARG}"
       ;;
     p)
-      NAME=${OPTARG}
+      NAME="${OPTARG}"
       ;;
     D)
-      DESC=${OPTARG}
+      DESC="${OPTARG}"
       ;;
     u)
-      DOCS=${OPTARG}
+      DOCS="${OPTARG}"
       ;;
     \?)
       usage
