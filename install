@@ -6,6 +6,7 @@
 #
 
 set -euo pipefail
+set -o xtrace
 IFS=$'\n\t'
 
 GUESTTOOLS=guesttools
