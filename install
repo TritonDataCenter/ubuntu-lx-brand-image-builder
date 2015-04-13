@@ -20,7 +20,7 @@ Usage:
   $0 -r <RELEASE> -d <INSTALL_DIR> -m <MIRROR> -i <IMAGE_NAME> -p <NAME> -D <DESC> -u <DOCS>
 
 Example:
-  $0 -r trusty -d /mnt/chroot -m http://archive.ubuntu.com/ubuntu/ -i lx-ubuntu-14.04 -p "Ubuntu 14.04 LX Brand" -D "Ubuntu 14.04 lx 64-bit lx-brand image." -u https://docs.joyent.com/images/lx-brand-beta
+  $0 -r trusty -d /mnt/chroot -m http://archive.ubuntu.com/ubuntu/ -i lx-ubuntu-14.04 -p "Ubuntu 14.04 LX Brand" -D "Ubuntu 14.04 64-bit lx-brand image." -u https://docs.joyent.com/images/lx-brand-beta
 
 OPTIONS:
   -r The desired release (e.g "trusty")
