@@ -81,7 +81,7 @@ do
 done
 
 if [[ -z ${filename} || -z ${kernel} || -z ${min_platform} || -z ${name} || -z ${version} ]]; then
-  echo "FATAL: All of -f, -n and -v are required."
+  echo "FATAL: All of -f, -k, -m, -n and -v are required."
   usage
 fi
 
