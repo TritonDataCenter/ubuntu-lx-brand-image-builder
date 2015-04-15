@@ -131,7 +131,8 @@ cat <<EOF
     ],
     "min_platform": {
          "7.0": "${min_platform}"
-       }
+       },
+    "brand": "lx"
   },
   "uuid": "${vm_uuid}",
   "public": false,
