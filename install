@@ -175,6 +175,10 @@ cp $INSTALL_DIR/usr/share/zoneinfo/UTC $INSTALL_DIR/etc/localtime
 echo "==> Disabling PasswordAuthentication"
 sed s/PasswordAuthentication\ yes/PasswordAuthentication\ no/ -i $INSTALL_DIR/etc/ssh/sshd_config
 
+echo "==> Removing resolvconf entries in $INSTALL_DIR/etc/resolvconf/resolv.conf.d/"
+rm -rf $INSTALL_DIR/etc/resolvconf/resolv.conf.d/tail
+rm -rf $INSTALL_DIR/etc/resolvconf/resolv.conf.d/original
+
 echo "==> Creating /etc/motd"
 cat << MOTD > $INSTALL_DIR/etc/motd
    __        .                   .
