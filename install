@@ -154,9 +154,6 @@ deb http://security.ubuntu.com/ubuntu $RELEASE-security universe
 deb-src http://security.ubuntu.com/ubuntu $RELEASE-security universe
 SOURCES
 
-echo "==> Cleaning up linux-image packages"
-chroot $INSTALL_DIR apt-get -y purge linux-image*
-
 echo "==> Cleaning up caches etc."
 chroot $INSTALL_DIR apt-get -y autoremove
 chroot $INSTALL_DIR apt-get -y clean
