@@ -133,7 +133,7 @@ if [[ -d $INSTALL_DIR ]]; then
 fi
 
 debootstrap --variant=minbase --components=main \
-    --include=inetutils-ping,net-tools,rsyslog,openssh-server \
+    --include=iputils-ping,net-tools,rsyslog,openssh-server \
     $RELEASE $INSTALL_DIR $MIRROR
 echo "==> Done!"
 
