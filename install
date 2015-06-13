@@ -132,7 +132,9 @@ if [[ -d $INSTALL_DIR ]]; then
   mkdir -p $INSTALL_DIR
 fi
 
-debootstrap $RELEASE $INSTALL_DIR $MIRROR
+debootstrap --variant=minbase --components=main \
+    --include=net-tools,rsyslog,openssh-server \
+    $RELEASE $INSTALL_DIR $MIRROR
 echo "==> Done!"
 
 echo "==> Updating $INSTALL_DIR/etc/apt/sources.list"
@@ -151,11 +153,6 @@ deb-src http://archive.ubuntu.com/ubuntu $RELEASE-updates universe
 deb http://security.ubuntu.com/ubuntu $RELEASE-security universe
 deb-src http://security.ubuntu.com/ubuntu $RELEASE-security universe
 SOURCES
-
-echo "==> Installing packages..."
-chroot $INSTALL_DIR apt-get -y clean
-chroot $INSTALL_DIR apt-get -y update
-chroot $INSTALL_DIR apt-get -y install openssh-server
 
 echo "==> Cleaning up linux-image packages"
 chroot $INSTALL_DIR apt-get -y purge linux-image*
