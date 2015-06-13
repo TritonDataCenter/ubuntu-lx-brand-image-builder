@@ -135,11 +135,6 @@ fi
 debootstrap $RELEASE $INSTALL_DIR $MIRROR
 echo "==> Done!"
 
-echo "==> Setting locale to en_US.UTF-8"
-chroot $INSTALL_DIR locale-gen en_US.UTF-8
-chroot $INSTALL_DIR dpkg-reconfigure locales
-echo "LANG=\"en_US.UTF-8\"" > $INSTALL_DIR/etc/default/locale
-
 echo "==> Updating $INSTALL_DIR/etc/apt/sources.list"
 cat << SOURCES > $INSTALL_DIR/etc/apt/sources.list
 deb http://archive.ubuntu.com/ubuntu $RELEASE main
@@ -160,7 +155,7 @@ SOURCES
 echo "==> Installing packages..."
 chroot $INSTALL_DIR apt-get -y clean
 chroot $INSTALL_DIR apt-get -y update
-chroot $INSTALL_DIR apt-get -y install openssh-server locales
+chroot $INSTALL_DIR apt-get -y install openssh-server
 
 echo "==> Cleaning up linux-image packages"
 chroot $INSTALL_DIR apt-get -y purge linux-image*
