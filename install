@@ -26,7 +26,7 @@ OPTIONS:
   -r The desired release (e.g "trusty")
   -d A path to the install directory
   -m A URL for the desired archive mirror
-  -i The name of the image. This is used for naming the tarball. 
+  -i The name of the image. This is used for naming the tarball.
   -p The proper name of the image. Use quotes. This is used in the MOTD and /etc/product file.
   -D A description for the image. This is used in the image manifest and the /etc/product file.
   -u A URL to the image docs [optional]
@@ -133,7 +133,7 @@ if [[ -d $INSTALL_DIR ]]; then
 fi
 
 debootstrap --components=main \
-    --include=curl,less,openssh-server,sudo,wget,vim-tiny \
+    --include=ca-certificates,curl,less,openssh-server,sudo,wget,vim-tiny \
     $RELEASE $INSTALL_DIR $MIRROR
 echo "==> Done!"
 
@@ -150,7 +150,7 @@ deb http://archive.ubuntu.com/ubuntu $RELEASE-updates main
 deb-src http://archive.ubuntu.com/ubuntu $RELEASE-updates main
 deb http://security.ubuntu.com/ubuntu $RELEASE-security main
 deb-src http://security.ubuntu.com/ubuntu $RELEASE-security main
- 
+
 deb http://archive.ubuntu.com/ubuntu $RELEASE universe
 deb-src http://archive.ubuntu.com/ubuntu $RELEASE universe
 deb http://archive.ubuntu.com/ubuntu $RELEASE-updates universe
