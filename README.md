@@ -8,6 +8,7 @@ In order to use these scripts you'll need:
 
 - Ubuntu (or Debian) running in a VM or bare metal (required for the `install` script)
 - debootstrap: `apt-get install -y debootstrap`
+- git: `apt-get install -y git`
 - A SmartOS (or SDC headnode) install (required for the `create-lx-image` script)
 
 
