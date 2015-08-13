@@ -159,6 +159,10 @@ deb http://security.ubuntu.com/ubuntu $RELEASE-security universe
 deb-src http://security.ubuntu.com/ubuntu $RELEASE-security universe
 SOURCES
 
+echo "==> Updating packages"
+chroot $INSTALL_DIR apt-get -y update
+chroot $INSTALL_DIR apt-get -y upgrade
+
 echo "==> Cleaning up caches etc."
 chroot $INSTALL_DIR apt-get -y autoremove
 chroot $INSTALL_DIR apt-get -y clean
