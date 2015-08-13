@@ -139,7 +139,7 @@ echo "==> Done!"
 
 echo "==> Setting locale to en_US.UTF-8"
 chroot $INSTALL_DIR locale-gen en_US.UTF-8
-chroot $INSTALL_DIR DEBIAN_FRONTEND=noninteractive; dpkg-reconfigure locales
+chroot $INSTALL_DIR DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
 echo "LANG=\"en_US.UTF-8\"" > $INSTALL_DIR/etc/default/locale
 
 echo "==> Updating $INSTALL_DIR/etc/apt/sources.list"
@@ -160,8 +160,8 @@ deb-src http://security.ubuntu.com/ubuntu $RELEASE-security universe
 SOURCES
 
 echo "==> Updating packages"
-chroot $INSTALL_DIR DEBIAN_FRONTEND=noninteractive; apt-get -y update
-chroot $INSTALL_DIR DEBIAN_FRONTEND=noninteractive; apt-get -y upgrade
+chroot $INSTALL_DIR DEBIAN_FRONTEND=noninteractive apt-get -y update
+chroot $INSTALL_DIR DEBIAN_FRONTEND=noninteractive apt-get -y upgrade
 
 echo "==> Cleaning up caches etc."
 chroot $INSTALL_DIR apt-get -y autoremove
