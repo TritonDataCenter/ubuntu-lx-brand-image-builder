@@ -176,7 +176,7 @@ chroot $INSTALL_DIR apt-get -y clean
 rm -rf $INSTALL_DIR/var/lib/apt/lists/*
 
 # Remove the divert that disables services
-chroot $INSTALL_DIR rm /sbin/initctl
+chroot $INSTALL_DIR rm -f /sbin/initctl
 chroot $INSTALL_DIR dpkg-divert --local --rename --remove /sbin/initctl
 
 echo "==> Setting TZ to UTC"
