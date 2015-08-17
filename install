@@ -138,7 +138,7 @@ debootstrap --components=main \
 echo "==> Done!"
 
 echo "==> Mounting /proc in chroot"
-chroot $INSTALL_DIR mount -t proc none /proc
+mount -o bind /proc $INSTALL_DIR/proc
 
 echo "==> Setting locale to en_US.UTF-8"
 export DEBIAN_FRONTEND=noninteractive
@@ -235,7 +235,7 @@ Description: $DESC
 PRODUCT
 
 echo "==> Unmounting /proc in chroot"
-chroot $INSTALL_DIR umount /proc
+umount $INSTALL_DIR/proc
 
 echo "==> Installing Guest tools in $INSTALL_DIR"
 echo "====> Initiallizing and fetching submodule $GUESTTOOLS"
