@@ -137,8 +137,9 @@ debootstrap --components=main \
     $RELEASE $INSTALL_DIR $MIRROR
 echo "==> Done!"
 
-echo "==> Mounting /proc in chroot"
+echo "==> Mounting /proc and /sys in chroot"
 mount -o bind /proc $INSTALL_DIR/proc
+mount -o bind /sys $INSTALL_DIR/sys
 
 echo "==> Setting locale to en_US.UTF-8"
 export DEBIAN_FRONTEND=noninteractive
@@ -234,8 +235,9 @@ Documentation: $DOCS
 Description: $DESC
 PRODUCT
 
-echo "==> Unmounting /proc in chroot"
+echo "==> Unmounting /proc and /sys in chroot"
 umount $INSTALL_DIR/proc
+umount $INSTALL_DIR/sys
 
 echo "==> Installing Guest tools in $INSTALL_DIR"
 echo "====> Initiallizing and fetching submodule $GUESTTOOLS"
