@@ -161,6 +161,12 @@ deb-src http://security.ubuntu.com/ubuntu $RELEASE-security universe
 SOURCES
 
 echo "==> Updating packages"
+
+# Disable services in chroot  via divert before upgrading packages
+# See https://bugs.launchpad.net/ubuntu/+source/upstart/+bug/430224
+chroot $INSTALL_DIR dpkg-divert --local --rename --add /sbin/initctl
+chroot $INSTALL_DIR ln -s /bin/true /sbin/initctl
+
 chroot $INSTALL_DIR apt-get -y update
 chroot $INSTALL_DIR apt-get -y upgrade
 
@@ -168,6 +174,10 @@ echo "==> Cleaning up caches etc."
 chroot $INSTALL_DIR apt-get -y autoremove
 chroot $INSTALL_DIR apt-get -y clean
 rm -rf $INSTALL_DIR/var/lib/apt/lists/*
+
+# Remove the divert that disables services
+chroot $INSTALL_DIR rm /sbin/initctl
+chroot $INSTALL_DIR dpkg-divert --local --rename --remove /sbin/initctl
 
 echo "==> Setting TZ to UTC"
 rm $INSTALL_DIR/etc/localtime
