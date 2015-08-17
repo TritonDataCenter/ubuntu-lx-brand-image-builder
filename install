@@ -234,6 +234,9 @@ Documentation: $DOCS
 Description: $DESC
 PRODUCT
 
+echo "==> Unmounting /proc in chroot"
+chroot $INSTALL_DIR umount /proc
+
 echo "==> Installing Guest tools in $INSTALL_DIR"
 echo "====> Initiallizing and fetching submodule $GUESTTOOLS"
 git submodule init
