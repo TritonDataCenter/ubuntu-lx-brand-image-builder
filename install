@@ -236,8 +236,8 @@ Description: $DESC
 PRODUCT
 
 echo "==> Unmounting /proc and /sys in chroot"
-umount $INSTALL_DIR/proc
-umount $INSTALL_DIR/sys
+umount -f $INSTALL_DIR/proc
+umount -f $INSTALL_DIR/sys
 
 echo "==> Installing Guest tools in $INSTALL_DIR"
 echo "====> Initiallizing and fetching submodule $GUESTTOOLS"
