@@ -138,8 +138,8 @@ debootstrap --components=main \
 echo "==> Done!"
 
 echo "==> Mounting /proc and /sys in chroot"
-mount -o bind /proc $INSTALL_DIR/proc
-mount -o bind /sys $INSTALL_DIR/sys
+mount --bind /proc $INSTALL_DIR/proc
+mount --bind /sys $INSTALL_DIR/sys
 
 echo "==> Setting locale to en_US.UTF-8"
 export DEBIAN_FRONTEND=noninteractive
