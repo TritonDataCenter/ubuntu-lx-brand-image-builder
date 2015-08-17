@@ -137,6 +137,9 @@ debootstrap --components=main \
     $RELEASE $INSTALL_DIR $MIRROR
 echo "==> Done!"
 
+echo "==> Mounting /proc in chroot"
+chroot $INSTALL_DIR mount -t proc none /proc
+
 echo "==> Setting locale to en_US.UTF-8"
 export DEBIAN_FRONTEND=noninteractive
 chroot $INSTALL_DIR locale-gen en_US.UTF-8
