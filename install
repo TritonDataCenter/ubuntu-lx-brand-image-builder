@@ -139,7 +139,7 @@ echo "==> Done!"
 
 echo "==> Mounting /proc and /sys in chroot"
 chroot $INSTALL_DIR mount -t proc none /proc
-#chroot $INSTALL_DIR mount -t sys none /sys
+chroot $INSTALL_DIR mount -t sys none /sys
 
 echo "==> Setting locale to en_US.UTF-8"
 export DEBIAN_FRONTEND=noninteractive
