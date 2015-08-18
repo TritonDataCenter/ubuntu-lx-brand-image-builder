@@ -237,7 +237,7 @@ PRODUCT
 
 echo "==> Unmounting /proc and /sys in chroot"
 umount -lf $INSTALL_DIR/proc
-umount -if $INSTALL_DIR/sys
+umount -lf $INSTALL_DIR/sys
 
 echo "==> Installing Guest tools in $INSTALL_DIR"
 echo "====> Initiallizing and fetching submodule $GUESTTOOLS"
