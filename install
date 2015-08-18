@@ -124,6 +124,18 @@ if [[ -z ${DOCS} ]]; then
   DOCS="https://docs.joyent.com/images/lx-brand-beta"
 fi
 
+umount_chroot() {
+    if grep -qs "$INSTALL_DIR/proc" $INSTALL_DIR/proc/mounts; then
+        echo "==> Unmounting /proc in chroot"
+        umount -lf $INSTALL_DIR/proc
+    fi
+
+    if grep -qs "$INSTALL_DIR/sys" $INSTALL_DIR/proc/mounts; then
+        echo "==> Unmounting /sys in chroot"
+        umount -lf $INSTALL_DIR/sys
+    fi
+}
+
 echo "==> Installing Ubuntu 14.04 into $INSTALL_DIR"
 
 if [[ -d $INSTALL_DIR ]]; then
@@ -136,6 +148,9 @@ debootstrap --components=main \
     --include=ca-certificates,curl,less,man-db,openssh-server,sudo,wget,vim-tiny \
     $RELEASE $INSTALL_DIR $MIRROR
 echo "==> Done!"
+
+# umount previous /proc and /sys if they exist
+umount_chroot
 
 echo "==> Mounting /proc and /sys in chroot"
 chroot $INSTALL_DIR mount -t proc none /proc
@@ -235,9 +250,7 @@ Documentation: $DOCS
 Description: $DESC
 PRODUCT
 
-echo "==> Unmounting /proc and /sys in chroot"
-umount -lf $INSTALL_DIR/proc
-umount -lf $INSTALL_DIR/sys
+umount_chroot
 
 echo "==> Installing Guest tools in $INSTALL_DIR"
 echo "====> Initiallizing and fetching submodule $GUESTTOOLS"
