@@ -140,6 +140,10 @@ echo "==> Installing Ubuntu 14.04 into $INSTALL_DIR"
 
 if [[ -d $INSTALL_DIR ]]; then
   echo "====> Found previous install dicectory. Deleting and creating a new one."
+
+  # umount previous /proc and /sys if they exist
+  umount_chroot
+  
   rm -rf $INSTALL_DIR
   mkdir -p $INSTALL_DIR
 fi
@@ -149,8 +153,7 @@ debootstrap --components=main \
     $RELEASE $INSTALL_DIR $MIRROR
 echo "==> Done!"
 
-# umount previous /proc and /sys if they exist
-umount_chroot
+
 
 echo "==> Mounting /proc and /sys in chroot"
 chroot $INSTALL_DIR mount -t proc none /proc
