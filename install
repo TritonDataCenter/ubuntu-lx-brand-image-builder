@@ -125,14 +125,14 @@ if [[ -z ${DOCS} ]]; then
 fi
 
 umount_chroot() {
-    if grep -qs "$INSTALL_DIR/proc" $INSTALL_DIR/proc/mounts; then
-        echo "====> Unmounting /proc in chroot"
-        umount -lf $INSTALL_DIR/proc
-    fi
-
     if grep -qs "$INSTALL_DIR/sys" $INSTALL_DIR/proc/mounts; then
         echo "====> Unmounting /sys in chroot"
         umount -lf $INSTALL_DIR/sys
+    fi
+    
+    if grep -qs "$INSTALL_DIR/proc" $INSTALL_DIR/proc/mounts; then
+        echo "====> Unmounting /proc in chroot"
+        umount -lf $INSTALL_DIR/proc
     fi
 }
 
