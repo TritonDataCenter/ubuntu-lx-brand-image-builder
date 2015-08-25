@@ -195,7 +195,6 @@ chroot $INSTALL_DIR apt-get -y upgrade
 echo "==> Cleaning up caches etc."
 chroot $INSTALL_DIR apt-get -y autoremove
 chroot $INSTALL_DIR apt-get -y clean
-rm -rf $INSTALL_DIR/var/lib/apt/lists/*
 
 # Remove the divert that disables services
 chroot $INSTALL_DIR rm -f /sbin/initctl
