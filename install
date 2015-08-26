@@ -159,6 +159,10 @@ echo "==> Mounting /proc and /sys in chroot"
 chroot $INSTALL_DIR mount -t proc none /proc
 chroot $INSTALL_DIR mount -t sysfs sysfs /sys
 
+echo "==> Setting TZ to UTC"
+rm $INSTALL_DIR/etc/localtime
+cp $INSTALL_DIR/usr/share/zoneinfo/UTC $INSTALL_DIR/etc/localtime
+
 echo "==> Setting locale to en_US.UTF-8"
 export DEBIAN_FRONTEND=noninteractive
 chroot $INSTALL_DIR locale-gen en_US.UTF-8
@@ -200,9 +204,6 @@ chroot $INSTALL_DIR apt-get -y clean
 chroot $INSTALL_DIR rm -f /sbin/initctl
 chroot $INSTALL_DIR dpkg-divert --local --rename --remove /sbin/initctl
 
-echo "==> Setting TZ to UTC"
-rm $INSTALL_DIR/etc/localtime
-cp $INSTALL_DIR/usr/share/zoneinfo/UTC $INSTALL_DIR/etc/localtime
 
 echo "==> Disabling PasswordAuthentication"
 sed s/PasswordAuthentication\ yes/PasswordAuthentication\ no/ -i $INSTALL_DIR/etc/ssh/sshd_config
