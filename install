@@ -149,7 +149,7 @@ if [[ -d $INSTALL_DIR ]]; then
 fi
 
 debootstrap --components=main \
-    --include=ca-certificates,curl,less,man-db,openssh-server,sudo,wget,vim \
+    --include=ca-certificates,curl,less,man-db,openssh-server,python-software-properties,software-properties-commonsudo,wget,vim \
     $RELEASE $INSTALL_DIR $MIRROR
 echo "==> Done!"
 
