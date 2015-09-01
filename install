@@ -153,8 +153,6 @@ debootstrap --components=main \
     $RELEASE $INSTALL_DIR $MIRROR
 echo "==> Done!"
 
-
-
 echo "==> Mounting /proc and /sys in chroot"
 chroot $INSTALL_DIR mount -t proc none /proc
 chroot $INSTALL_DIR mount -t sysfs sysfs /sys
@@ -196,7 +194,7 @@ chroot $INSTALL_DIR ln -s /bin/true /sbin/initctl
 chroot $INSTALL_DIR apt-get -y update
 chroot $INSTALL_DIR apt-get -y upgrade
 
-echo "Installing additional packages"
+echo "==> Installing additional packages"
 chroot $INSTALL_DIR apt-get -y install --no-install-recommends python-software-properties software-properties-common
 
 
