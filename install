@@ -257,6 +257,16 @@ PRODUCT
 
 umount_chroot
 
+if [[ ! -d $INSTALL_DIR/var/svc ]]; then
+  echo "==> Creating $INSTALL_DIR/var/svc"
+  mkdir -p $INSTALL_DIR/var/svc
+fi
+
+if [[ ! -d $INSTALL_DIR/var/db ]]; then
+  echo "==> Creating $INSTALL_DIR/var/db"
+  mkdir -p $INSTALL_DIR/var/db
+fi
+
 echo "==> Installing Guest tools in $INSTALL_DIR"
 echo "====> Initiallizing and fetching submodule $GUESTTOOLS"
 git submodule init
