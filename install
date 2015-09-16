@@ -10,6 +10,7 @@ IFS=$'\n\t'
 
 GUESTTOOLS=guesttools
 BUILD_DATE=$(date +%Y%m%d)
+EXCLUDES=$PWD/exclude.txt
 
 usage() {
 cat <<EOF
@@ -277,7 +278,7 @@ cd $GUESTTOOLS
 cd ..
 
 echo "==> Saving installation as $TARGET. This may take a few minutes."
-tar czf $TARGET --exclude-from=exclude.txt $INSTALL_DIR/
+tar --numeric-owner --create --auto-compress --exclude-from=$EXCLUDES --file "$TARGET" --directory "$INSTALL_DIR" --transform='s,^./,,' .
 
 echo "==> Installation complete!"
 echo "==> $TARGET"
