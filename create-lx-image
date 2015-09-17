@@ -164,7 +164,7 @@ create_dataset() {
 
 install_tar() {
   echo "==> Installing the tar archive, this will take a few minutes..."
-  ( gtar "$gtaropts" "$TARBALL" "$zroot/" )
+  ( gtar "$gtaropts" "$TARBALL" -C "$zroot/" )
   if [[ "$?" -ne "0" ]] ; then
     echo "==> Error: extraction from tar archive failed."
     zfs destroy -r zones/$IUUID
