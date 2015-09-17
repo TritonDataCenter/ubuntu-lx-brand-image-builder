@@ -141,6 +141,7 @@ else
   exit 1
 fi
 
+# Add -f flag
 gtaropts="${gtaropts}f"
 
 zpath="/zones/$IUUID"
