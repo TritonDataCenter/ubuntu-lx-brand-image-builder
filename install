@@ -46,6 +46,7 @@ IMAGE_NAME=
 NAME=
 DESC=
 DOCS=
+CUSTOMIZE=
 
 while getopts "hr:a:d:m:i:p:D:u:c:" OPTION
 do
@@ -290,9 +291,11 @@ cd $GUESTTOOLS
 ./install.sh -i $INSTALL_DIR
 cd ..
 
-echo "==> Executing ${CUSTOMIZE} file.."
-chmod +x ${CUSTOMIZE}
-INSTALL_DIR="${INSTALL_DIR}" ./${CUSTOMIZE}
+if [[ -z ${CUSTOMIZE} ]]; then
+  echo "==> Executing ${CUSTOMIZE} file.."
+  chmod +x ${CUSTOMIZE}
+  INSTALL_DIR="${INSTALL_DIR}" ./${CUSTOMIZE}
+fi
 
 echo "==> Saving installation as $TARGET. This may take a few minutes."
 tar --numeric-owner --create --auto-compress --exclude-from=$EXCLUDES --file "$TARGET" --directory "$INSTALL_DIR" --transform='s,^./,,' .
