@@ -291,7 +291,7 @@ cd $GUESTTOOLS
 ./install.sh -i $INSTALL_DIR
 cd ..
 
-if [[ -z ${CUSTOMIZE} ]]; then
+if [[ ! -z ${CUSTOMIZE} ]]; then
   echo "==> Executing ${CUSTOMIZE} file.."
   chmod +x ${CUSTOMIZE}
   INSTALL_DIR="${INSTALL_DIR}" ./${CUSTOMIZE}
