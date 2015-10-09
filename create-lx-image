@@ -240,7 +240,7 @@ create_file() {
 
 create_manifest() {
   echo "==> Creating manifest file..."
-  ./create-manifest -f ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz -k ${KERNEL} -m ${MIN_PLATFORM} -n ${IMAGE_NAME} -o linux -v ${BUILD_DATE} -d ${DESC} -h ${DOCS} > ${IMAGE_NAME}-${BUILD_DATE}.json
+  ./create-manifest -f ${IMAGE_NAME}-${BUILD_DATE}.zfs.xz -k ${KERNEL} -m ${MIN_PLATFORM} -n ${IMAGE_NAME} -o linux -v ${BUILD_DATE} -d ${DESC} -h ${DOCS} > ${IMAGE_NAME}-${BUILD_DATE}.json
   echo "==> done!"
   echo "==>"
 }
