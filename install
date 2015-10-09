@@ -133,7 +133,7 @@ if [[ -z ${DESC} ]]; then
   exit 1
 fi
 
-TARGET="${IMAGE_NAME}-${BUILD_DATE}.tar.xz"
+TARGET="${IMAGE_NAME}-${BUILD_DATE}.tar.gz"
 
 if [[ -z ${DOCS} ]]; then
   DOCS="https://docs.joyent.com/images/lx-brand-beta"
