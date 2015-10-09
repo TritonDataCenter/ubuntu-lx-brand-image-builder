@@ -228,7 +228,7 @@ create_file() {
   zfs snapshot zones/$IUUID@final
   
   echo "====> Doing a zfs send. This may take a few minutes..."
-  zfs send zones/$IUUID@final | xz -6 > ${IMAGE_NAME}-${BUILD_DATE}.zfs.xz
+  zfs send zones/$IUUID@final | xz -9 > ${IMAGE_NAME}-${BUILD_DATE}.zfs.xz
   echo "====> Done."
   
   echo "====> Cleaning up..."
