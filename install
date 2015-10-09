@@ -18,7 +18,7 @@ cat <<EOF
 Install and modify Ubuntu in a given directory using a given mirror.
 
 Usage:
-  $0 -r <RELEASE> -a <ARCH> -d <INSTALL_DIR> -m <MIRROR> -i <IMAGE_NAME> -p <NAME> -D <DESC> -u <DOCS>
+  $0 -r <RELEASE> -a <ARCH> -d <INSTALL_DIR> -m <MIRROR> -i <IMAGE_NAME> -p <NAME> -D <DESC> -u <DOCS> -c <CUSTOMIZE FILE>
 
 Example:
   $0 -r trusty -a amd64 -d /mnt/chroot -m http://archive.ubuntu.com/ubuntu/ -i lx-ubuntu-14.04 -p "Ubuntu 14.04 LX Brand" -D "Ubuntu 14.04 64-bit lx-brand image." -u https://docs.joyent.com/images/lx-brand-beta
@@ -32,6 +32,7 @@ OPTIONS:
   -p The proper name of the image. Use quotes. This is used in the MOTD and /etc/product file.
   -D A description for the image. This is used in the image manifest and the /etc/product file.
   -u A URL to the image docs [optional]
+  -c Customize file for image you want to create.  customize.postgresql, customize.percona
   -h Show this message
 
 EOF
@@ -46,7 +47,7 @@ NAME=
 DESC=
 DOCS=
 
-while getopts "hr:a:d:m:i:p:D:u:" OPTION
+while getopts "hr:a:d:m:i:p:D:u:c:" OPTION
 do
   case $OPTION in
     h)
@@ -76,6 +77,9 @@ do
       ;;
     u)
       DOCS=${OPTARG}
+      ;;
+    c)
+      CUSTOMIZE=${OPTARG}
       ;;
     \?)
       usage
@@ -207,7 +211,6 @@ chroot $INSTALL_DIR apt-get -y upgrade
 echo "==> Installing additional packages"
 chroot $INSTALL_DIR apt-get -y install --no-install-recommends python-software-properties software-properties-common
 
-
 echo "==> Cleaning up caches etc."
 chroot $INSTALL_DIR apt-get -y autoremove
 chroot $INSTALL_DIR apt-get -y clean
@@ -277,6 +280,7 @@ if [[ ! -d $INSTALL_DIR/var/db ]]; then
   mkdir -p $INSTALL_DIR/var/db
 fi
 
+
 echo "==> Installing Guest tools in $INSTALL_DIR"
 echo "====> Initiallizing and fetching submodule $GUESTTOOLS"
 git submodule init
@@ -285,6 +289,10 @@ echo "====> Running ./install.sh -i $INSTALL_DIR"
 cd $GUESTTOOLS
 ./install.sh -i $INSTALL_DIR
 cd ..
+
+echo "==> Executing ${CUSTOMIZE} file.."
+chmod +x ${CUSTOMIZE}
+INSTALL_DIR="${INSTALL_DIR}" ./${CUSTOMIZE}
 
 echo "==> Saving installation as $TARGET. This may take a few minutes."
 tar --numeric-owner --create --auto-compress --exclude-from=$EXCLUDES --file "$TARGET" --directory "$INSTALL_DIR" --transform='s,^./,,' .
