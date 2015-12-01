@@ -1,0 +1,10 @@
+echo "==> Updating $INSTALL_DIR/etc/apt/sources.list"
+chroot $INSTALL_DIR apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse" | sudo tee $INSTALL_DIR/etc/apt/sources.list.d/mongodb-org-3.0.list
+
+echo "==> Installing custom packages."
+chroot $INSTALL_DIR apt-get -y update
+chroot $INSTALL_DIR apt-get -y --force-yes install mongodb-org
+cp /mnt/derek/dtracetools-lx_0.1_amd64.deb $INSTALL_DIR/dtracetools-lx_0.1_amd64.deb
+chroot $INSTALL_DIR dpkg -i dtracetools-lx_0.1_amd64.deb
+rm $INSTALL_DIR/dtracetools-lx_0.1_amd64.deb
