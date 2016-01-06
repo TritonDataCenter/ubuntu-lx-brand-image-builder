@@ -31,4 +31,4 @@ echo "==> Installing Node.js v$NODE_VERSION in /usr/local"
 tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1
 
 echo "==> Cleaning up"
-rm "node-v$NODE_VERSION-linux-x64.tar.z" SHASUMS256.txt.asc
+rm "node-v$NODE_VERSION-linux-x64.tar.gz" SHASUMS256.txt.asc
