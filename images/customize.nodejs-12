@@ -1,5 +1,6 @@
 set -euo pipefail
 IFS=$'\n\t'
+set -o xtrace
 
 # The version of Node.js v0.12.x
 NODE_VERSION=0.12.9
