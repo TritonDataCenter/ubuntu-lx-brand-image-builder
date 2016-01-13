@@ -5,6 +5,3 @@ echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse" 
 echo "==> Installing custom packages."
 chroot $INSTALL_DIR apt-get -y update
 chroot $INSTALL_DIR apt-get -y --force-yes install mongodb-org
-cp /mnt/derek/dtracetools-lx_0.1_amd64.deb $INSTALL_DIR/dtracetools-lx_0.1_amd64.deb
-chroot $INSTALL_DIR dpkg -i dtracetools-lx_0.1_amd64.deb
-rm $INSTALL_DIR/dtracetools-lx_0.1_amd64.deb
