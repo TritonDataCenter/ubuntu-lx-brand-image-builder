@@ -11,6 +11,8 @@ In order to use these scripts you'll need:
 - git: `apt-get install -y git`
 - A SmartOS (or SDC headnode) install (required for the `create-lx-image` script)
 
+**Note***: The build scripts currently assume you are running under a KVM ubuntu-certified instance that has a secondary disk mounted to `/mnt`. The scripts have not been tested on an lx-brand instance.
+
 
 ## Usage
 
