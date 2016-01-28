@@ -33,6 +33,8 @@ OPTIONS:
   -D A description for the image. This is used in the image manifest and the /etc/product file.
   -u A URL to the image docs [optional]
   -c Customize file for image you want to create.  customize.postgresql, customize.percona
+  -b Base image name. ubuntu-14.04
+  -v Base image version. 20151005
   -h Show this message
 
 EOF
@@ -47,8 +49,10 @@ NAME=
 DESC=
 DOCS=
 CUSTOMIZE=
+BASE_NAME=
+BASE_VERSION=
 
-while getopts "hr:a:d:m:i:p:D:u:c:" OPTION
+while getopts "hr:a:d:m:i:p:D:u:c:b:v:" OPTION
 do
   case $OPTION in
     h)
@@ -81,6 +85,12 @@ do
       ;;
     c)
       CUSTOMIZE=${OPTARG}
+      ;;
+    b)
+      BASE_NAME=${OPTARG}
+      ;;
+    v)
+      BASE_VERSION=${OPTARG}
       ;;
     \?)
       usage
@@ -265,11 +275,10 @@ echo "==> Creating /etc/product file"
 cat << PRODUCT > $INSTALL_DIR/etc/product
 Name: Joyent Instance
 Image: $NAME $BUILD_DATE
+Base Image: $BASE_NAME $BASE_VERSION
 Documentation: $DOCS
 Description: $DESC
 PRODUCT
-
-umount_chroot
 
 if [[ ! -d $INSTALL_DIR/var/svc ]]; then
   echo "==> Creating $INSTALL_DIR/var/svc"
