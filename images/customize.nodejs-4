@@ -30,8 +30,8 @@ echo "==> Verifying package"
 gpg --verify SHASUMS256.txt.asc
 grep " node-v$NODE_VERSION-linux-x64.tar.xz\$" SHASUMS256.txt.asc | sha256sum -c - 
 
-echo "==> Installing Node.js v$NODE_VERSION in /usr/local"
-tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1
+echo "==> Installing Node.js v$NODE_VERSION in $INSTALL_DIR/usr/local"
+tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C $INSTALL_DIR/usr/local --strip-components=1
 
 echo "==> Cleaning up"
 rm "node-v$NODE_VERSION-linux-x64.tar.xz" SHASUMS256.txt.asc
