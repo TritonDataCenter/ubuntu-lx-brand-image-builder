@@ -21,7 +21,7 @@ Usage:
   $0 -r <RELEASE> -a <ARCH> -d <INSTALL_DIR> -m <MIRROR> -i <IMAGE_NAME> -p <NAME> -D <DESC> -u <DOCS> -c <CUSTOMIZE FILE> -b <BASE IMAGE>
 
 Example:
-  $0 -r trusty -a amd64 -d /mnt/chroot -m http://archive.ubuntu.com/ubuntu/ -i lx-ubuntu-14.04 -p "Ubuntu 14.04 LX Brand" -D "Ubuntu 14.04 64-bit lx-brand image." -u https://docs.joyent.com/images/lx-brand-beta
+  $0 -r trusty -a amd64 -d /mnt/chroot -m http://archive.ubuntu.com/ubuntu/ -i lx-ubuntu-14.04 -p "Ubuntu 14.04 LX Brand" -D "Ubuntu 14.04 64-bit lx-brand image." -u https://docs.joyent.com/images/container-native-linux
 
 OPTIONS:
   -r The desired release (e.g "trusty")
@@ -141,7 +141,7 @@ fi
 TARGET="${IMAGE_NAME}-${BUILD_DATE}.tar.gz"
 
 if [[ -z ${DOCS} ]]; then
-  DOCS="https://docs.joyent.com/images/lx-brand-beta"
+  DOCS="https://docs.joyent.com/images/container-native-linux"
 fi
 
 umount_chroot() {
