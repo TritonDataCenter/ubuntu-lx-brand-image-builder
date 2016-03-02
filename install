@@ -225,6 +225,12 @@ chroot $INSTALL_DIR apt-get -y clean
 chroot $INSTALL_DIR rm -f /sbin/initctl
 chroot $INSTALL_DIR dpkg-divert --local --rename --remove /sbin/initctl
 
+# Remove weekly cron for fstrim which doesn't make much sense for an
+# lx-brand image.
+if [[ -f $INSTALL_DIR/etc/cron.weekly/fstrim ]]; then
+  echo "==> Removing /etc/cron.weekly/fstrim"
+  rm -rf $INSTALL_DIR/etc/cron.weekly/fstrim
+fi
 
 echo "==> Disabling PasswordAuthentication"
 sed s/PasswordAuthentication\ yes/PasswordAuthentication\ no/ -i $INSTALL_DIR/etc/ssh/sshd_config
