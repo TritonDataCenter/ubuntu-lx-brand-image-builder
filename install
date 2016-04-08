@@ -326,9 +326,9 @@ if [[ ! -z ${CUSTOMIZE} ]]; then
   echo "==> Executing ${CUSTOMIZE} file.."
   chmod +x ${CUSTOMIZE}
   if [[ -z ${CUSTOM_OPTS} ]]; then
-    INSTALL_DIR="${INSTALL_DIR}" ./${CUSTOMIZE} ${CUSTOM_OPTS}
-  else
     INSTALL_DIR="${INSTALL_DIR}" ./${CUSTOMIZE}
+  else
+    INSTALL_DIR="${INSTALL_DIR}" ./${CUSTOMIZE} ${CUSTOM_OPTS}
   fi
 fi
 
