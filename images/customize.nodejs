@@ -2,8 +2,26 @@ set -euo pipefail
 IFS=$'\n\t'
 set -o xtrace
 
-# The version of Node.js v4.x.x
-NODE_VERSION=4.4.0
+usage() {
+cat <<EOF
+
+Install a given version of Node.js.
+
+Usage:
+  $0 <Node.js version>
+
+Example:
+  $0 4.4.0
+EOF
+}
+
+# We only expect one argument
+if [[ $# -ne 1 ]]; then
+  usage
+  exit 1
+fi
+
+NODE_VERSION=$1
 
 echo "==> Adding gpg keys from https://github.com/nodejs/node"
 
