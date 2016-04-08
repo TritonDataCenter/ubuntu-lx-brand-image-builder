@@ -7,6 +7,7 @@
 
 set -euo pipefail
 IFS=$'\n\t'
+set -o xtrace
 
 GUESTTOOLS=guesttools
 BUILD_DATE=$(date +%Y%m%d)
@@ -33,6 +34,7 @@ OPTIONS:
   -D A description for the image. This is used in the image manifest and the /etc/product file.
   -u A URL to the image docs [optional]
   -c Customize file for image you want to create.  customize.postgresql, customize.percona
+  -o Optional arguments to be passed to the customize file.
   -b Base image name. ubuntu-14.04
   -h Show this message
 
@@ -48,9 +50,10 @@ NAME=
 DESC=
 DOCS=
 CUSTOMIZE=
+CUSTOM_OPTS=
 BASE_NAME=
 
-while getopts "hr:a:d:m:i:p:D:u:c:b:" OPTION
+while getopts "hr:a:d:m:i:p:D:u:c:o:b:" OPTION
 do
   case $OPTION in
     h)
@@ -83,6 +86,9 @@ do
       ;;
     c)
       CUSTOMIZE=${OPTARG}
+      ;;
+    o)
+      CUSTOM_OPTS=${OPTARG}
       ;;
     b)
       BASE_NAME=${OPTARG}
@@ -319,7 +325,11 @@ dpkg --root $INSTALL_DIR -i ${DTRACE_PACKAGE}
 if [[ ! -z ${CUSTOMIZE} ]]; then
   echo "==> Executing ${CUSTOMIZE} file.."
   chmod +x ${CUSTOMIZE}
-  INSTALL_DIR="${INSTALL_DIR}" ./${CUSTOMIZE}
+  if [[ -z ${CUSTOM_OPTS} ]]; then
+    INSTALL_DIR="${INSTALL_DIR}" ./${CUSTOMIZE}
+  else
+    INSTALL_DIR="${INSTALL_DIR}" ./${CUSTOMIZE} ${CUSTOM_OPTS}
+  fi
 fi
 
 echo "==> Saving installation as $TARGET. This may take a few minutes."
