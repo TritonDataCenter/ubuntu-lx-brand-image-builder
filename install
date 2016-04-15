@@ -209,20 +209,20 @@ deb http://security.ubuntu.com/ubuntu $RELEASE-security universe
 deb-src http://security.ubuntu.com/ubuntu $RELEASE-security universe
 SOURCES
 
-echo "==> Updating packages"
 
 # Disable services in chroot via divert before upgrading packages
 # See https://bugs.launchpad.net/ubuntu/+source/upstart/+bug/430224
 chroot $INSTALL_DIR dpkg-divert --local --rename --add /sbin/initctl
 chroot $INSTALL_DIR ln -s /bin/true /sbin/initctl
 
-chroot $INSTALL_DIR apt-get -y update
-chroot $INSTALL_DIR apt-get -y upgrade
-
 echo "==> Installing standard packages"
 # This is equivalent to tasksel install standard
 chroot $INSTALL_DIR apt-get -y install --no-install-recommends standard^ 
 #chroot $INSTALL_DIR apt-get -y install --no-install-recommends python-software-properties software-properties-common
+
+echo "==> Updating packages"
+chroot $INSTALL_DIR apt-get -y update
+chroot $INSTALL_DIR apt-get -y upgrade
 
 echo "==> Cleaning up caches etc."
 chroot $INSTALL_DIR apt-get -y autoremove
