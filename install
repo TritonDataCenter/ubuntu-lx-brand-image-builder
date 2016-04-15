@@ -221,7 +221,7 @@ chroot $INSTALL_DIR apt-get -y upgrade
 
 echo "==> Installing standard packages"
 # This is equivalent to tasksel install standard
-chroot $INSTALL_DIR apt-get -y install standard^ 
+chroot $INSTALL_DIR apt-get -y install --no-install-recommends standard^ 
 #chroot $INSTALL_DIR apt-get -y install --no-install-recommends python-software-properties software-properties-common
 
 echo "==> Cleaning up caches etc."
