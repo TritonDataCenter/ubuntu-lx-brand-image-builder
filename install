@@ -223,6 +223,17 @@ chroot $INSTALL_DIR apt-get -y upgrade
 echo "==> Installing additional packages"
 chroot $INSTALL_DIR apt-get -y install --no-install-recommends python-software-properties software-properties-common
 
+# Pin udev version for Ubuntu 16.04 and newer
+# See https://github.com/joyent/smartos-live/issues/596
+if [[ "$(. /etc/os-release && echo $VERSION_ID)" -ge 16.04 ]]; then
+  echo "==> Pinning udev package"
+  cat << UDEV > $INSTALL_DIR/etc/apt/preferences.d/udev
+  Package: udev
+  Pin: release *
+  Pin-Priority: -1
+UDEV
+fi
+
 echo "==> Cleaning up caches etc."
 chroot $INSTALL_DIR apt-get -y autoremove
 chroot $INSTALL_DIR apt-get -y clean
