@@ -225,7 +225,7 @@ chroot $INSTALL_DIR apt-get -y install --no-install-recommends python-software-p
 
 # Pin udev version for Ubuntu 16.04 and newer
 # See https://github.com/joyent/smartos-live/issues/596
-if [[ "$(. /etc/os-release && echo $VERSION_ID)" -ge 16.04 ]]; then
+if [[ "$(. $INSTALL_DIR/etc/os-release && echo $VERSION_ID)" -ge 16.04 ]]; then
   echo "==> Pinning udev package"
   cat << UDEV > $INSTALL_DIR/etc/apt/preferences.d/udev
   Package: udev
