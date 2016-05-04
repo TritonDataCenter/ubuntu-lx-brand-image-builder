@@ -175,7 +175,7 @@ if [[ -d $INSTALL_DIR ]]; then
 fi
 
 debootstrap --components=main --arch=$ARCH \
-    --include=apt-transport-https,ca-certificates,curl,gettext-base,less,man-db,openssh-server,sudo,wget,vim \
+    --include=apt-transport-https,ca-certificates,curl,dbus,gettext-base,less,man-db,openssh-server,sudo,wget,vim \
     $RELEASE $INSTALL_DIR $MIRROR
 echo "==> Done!"
 
@@ -223,16 +223,45 @@ chroot $INSTALL_DIR apt-get -y upgrade
 echo "==> Installing additional packages"
 chroot $INSTALL_DIR apt-get -y install --no-install-recommends python-software-properties software-properties-common
 
-# Pin udev version for Ubuntu 16.04 and newer
-# See https://github.com/joyent/smartos-live/issues/596
+# Get release version via os-release
 CHECK_VERSION=$(echo "$(. $INSTALL_DIR/etc/os-release && echo $VERSION_ID)>14.04" | bc)
+
+
 if [[ "$CHECK_VERSION" -eq 1 ]]; then
+  # Pin udev version for Ubuntu 16.04 and newer
+  # See https://github.com/joyent/smartos-live/issues/596
   echo "==> Pinning udev package"
   cat << UDEV > $INSTALL_DIR/etc/apt/preferences.d/udev
   Package: udev
   Pin: release *
   Pin-Priority: -1
 UDEV
+
+  # Systemd overrides for systemd-timedated and systemd-hostnamed
+  # in Ubuntu 16.04 and newer
+  #
+  # See:
+  #   - https://github.com/joyent/centos-lx-brand-image-builder/issues/5
+  #   - https://smartos.org/bugview/OS-5304
+  #
+  # TODO: This should be removed when the relevant cgroup etc support is in
+  # the platform.
+  SERVICES=( systemd-timedated systemd-hostnamed )
+  echo "==> Adding systemd overrides for: ${SERVICES[@]}"
+  
+  for SERVICE in ${SERVICES[@]}; do
+    OVERRIDE_DIR=$INSTALL_DIR/etc/systemd/system/${SERVICE}.service.d
+    mkdir -p $OVERRIDE_DIR
+
+    cat << OVERRIDE > ${OVERRIDE_DIR}/override.conf
+[Service]
+PrivateTmp=no
+PrivateDevices=no
+PrivateNetwork=no
+ProtectSystem=no
+ProtectHome=no
+OVERRIDE
+  done
 fi
 
 echo "==> Cleaning up caches etc."
