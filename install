@@ -229,7 +229,8 @@ CHECK_VERSION=$(echo "$(. $INSTALL_DIR/etc/os-release && echo $VERSION_ID)>14.04
 if [[ "$CHECK_VERSION" -eq 1 ]]; then
   
   # Uninstall udev
-  # See https://github.com/joyent/smartos-live/issues/596# 
+  # See https://github.com/joyent/smartos-live/issues/596
+  echo "Removing udev package"
   chroot $INSTALL_DIR apt-get -y remove udev
   chroot $INSTALL_DIR apt-get autoremove
 
