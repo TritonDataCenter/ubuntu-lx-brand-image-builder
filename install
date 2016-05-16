@@ -226,16 +226,12 @@ chroot $INSTALL_DIR apt-get -y install --no-install-recommends python-software-p
 # Get release version via os-release
 CHECK_VERSION=$(echo "$(. $INSTALL_DIR/etc/os-release && echo $VERSION_ID)>14.04" | bc)
 
-
 if [[ "$CHECK_VERSION" -eq 1 ]]; then
-  # Pin udev version for Ubuntu 16.04 and newer
-  # See https://github.com/joyent/smartos-live/issues/596
-  echo "==> Pinning udev package"
-  cat << UDEV > $INSTALL_DIR/etc/apt/preferences.d/udev
-  Package: udev
-  Pin: release *
-  Pin-Priority: -1
-UDEV
+  
+  # Uninstall udev
+  # See https://github.com/joyent/smartos-live/issues/596# 
+  chroot $INSTALL_DIR apt-get -y remove udev
+  chroot $INSTALL_DIR apt-get autoremove
 
   # Systemd overrides for systemd-timedated and systemd-hostnamed
   # in Ubuntu 16.04 and newer
