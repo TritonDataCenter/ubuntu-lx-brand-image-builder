@@ -218,7 +218,7 @@ chroot $INSTALL_DIR dpkg-divert --local --rename --add /sbin/initctl
 chroot $INSTALL_DIR ln -s /bin/true /sbin/initctl
 
 chroot $INSTALL_DIR apt-get -y update
-# chroot $INSTALL_DIR apt-get -y upgrade
+chroot $INSTALL_DIR apt-get -y upgrade
 
 echo "==> Installing additional packages"
 chroot $INSTALL_DIR apt-get -y install --no-install-recommends python-software-properties software-properties-common
