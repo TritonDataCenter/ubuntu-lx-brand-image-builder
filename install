@@ -234,16 +234,16 @@ if [[ "$CHECK_VERSION" -eq 1 ]]; then
   chroot $INSTALL_DIR apt-get -y remove udev
   chroot $INSTALL_DIR apt-get autoremove
 
-  # Systemd overrides for systemd-timedated and systemd-hostnamed
-  # in Ubuntu 16.04 and newer
+  # Systemd overrides for Ubuntu 16.04 and newer
   #
   # See:
   #   - https://github.com/joyent/centos-lx-brand-image-builder/issues/5
+  #   - https://github.com/joyent/centos-lx-brand-image-builder/issues/7
   #   - https://smartos.org/bugview/OS-5304
   #
   # TODO: This should be removed when the relevant cgroup etc support is in
   # the platform.
-  SERVICES=( systemd-timedated systemd-hostnamed )
+  SERVICES=( systemd-hostnamed systemd-localed systemd-timedated )
   echo "==> Adding systemd overrides for: ${SERVICES[@]}"
   
   for SERVICE in ${SERVICES[@]}; do
