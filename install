@@ -342,10 +342,12 @@ echo "==> Installing Guest tools in $INSTALL_DIR"
 echo "====> Initiallizing and fetching submodule $GUESTTOOLS"
 git submodule init
 git submodule update
+
 echo "====> Running ./install.sh -i $INSTALL_DIR"
-cd $GUESTTOOLS
-./install.sh -i $INSTALL_DIR
-cd ..
+(
+  cd $GUESTTOOLS
+  ./install.sh -i $INSTALL_DIR
+)
 
 echo "==> Installing dtracetools-lx in $INSTALL_DIR"
 echo "====> Downloading package and SHASUMs from https://us-east.manta.joyent.com/joyentsoln/public/"
