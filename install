@@ -224,6 +224,7 @@ echo "==> Installing additional packages"
 chroot $INSTALL_DIR apt-get -y install --no-install-recommends python-software-properties software-properties-common
 
 # Get release version via os-release
+# shellcheck source=/dev/null
 CHECK_VERSION=$(echo "$(. $INSTALL_DIR/etc/os-release && echo $VERSION_ID)>14.04" | bc)
 
 if [[ "$CHECK_VERSION" -eq 1 ]]; then
