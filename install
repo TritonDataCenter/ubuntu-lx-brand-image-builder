@@ -245,9 +245,9 @@ if [[ "$CHECK_VERSION" -eq 1 ]]; then
   # TODO: This should be removed when the relevant cgroup etc support is in
   # the platform.
   SERVICES=( systemd-hostnamed systemd-localed systemd-timedated )
-  echo "==> Adding systemd overrides for: ${SERVICES[@]}"
   
-  for SERVICE in ${SERVICES[@]}; do
+  for SERVICE in "${SERVICES[@]}"; do
+    echo "==> Adding systemd overrides for $SERVICE"
     OVERRIDE_DIR=$INSTALL_DIR/etc/systemd/system/${SERVICE}.service.d
     mkdir -p $OVERRIDE_DIR
 
