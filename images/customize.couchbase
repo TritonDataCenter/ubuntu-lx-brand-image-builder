@@ -1,0 +1,4 @@
+echo "==> Installing custom packages."
+wget http://packages.couchbase.com/releases/4.0.0/couchbase-server-community_4.0.0-ubuntu14.04_amd64.deb -O $INSTALL_DIR/root/couchbase-server.deb
+chroot $INSTALL_DIR apt-get -y update
+chroot $INSTALL_DIR apt-get -y upgrade
