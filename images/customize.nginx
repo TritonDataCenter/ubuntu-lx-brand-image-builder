@@ -1,0 +1,13 @@
+echo "==> Updating $INSTALL_DIR/etc/apt/sources.list"
+wget http://nginx.org/keys/nginx_signing.key -O $INSTALL_DIR/root/nginx_signing.key
+chroot $INSTALL_DIR apt-key add root/nginx_signing.key
+cat << SOURCES >> $INSTALL_DIR/etc/apt/sources.list
+deb http://nginx.org/packages/ubuntu/ trusty nginx
+deb-src http://nginx.org/packages/ubuntu/ trusty nginx
+SOURCES
+rm $INSTALL_DIR/root/nginx_signing.key
+
+echo "==> Installing custom packages."
+chroot $INSTALL_DIR apt-get -y update
+chroot $INSTALL_DIR apt-get -y install nginx
+chroot $INSTALL_DIR apt-get -y install php5-fpm
