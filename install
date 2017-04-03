@@ -262,6 +262,15 @@ OVERRIDE
   done
 fi
 
+echo "==> Pinning makedev package"
+# Prevents apt-get upgrade issue when upgrading in a container environment.
+# Similar to https://bugs.launchpad.net/ubuntu/+source/makedev/+bug/1675163
+cat << MAKEDEV > $INSTALL_DIR/etc/apt/preferences.d/makedev
+Package: makedev
+Pin: release *
+Pin-Priority: -1
+MAKEDEV
+
 echo "==> Cleaning up caches etc."
 chroot $INSTALL_DIR apt-get -y autoremove
 chroot $INSTALL_DIR apt-get -y clean
