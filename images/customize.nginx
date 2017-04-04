@@ -1,5 +1,5 @@
 echo "==> Updating $INSTALL_DIR/etc/apt/sources.list"
-wget https://nginx.org/keys/nginx_signing.key -O $INSTALL_DIR/root/nginx_signing.key
+curl -s https://nginx.org/keys/nginx_signing.key -o $INSTALL_DIR/root/nginx_signing.key
 chroot $INSTALL_DIR apt-key add /root/nginx_signing.key
 cat << SOURCES >> $INSTALL_DIR/etc/apt/sources.list
 deb http://nginx.org/packages/ubuntu/ trusty nginx

@@ -1,5 +1,5 @@
 echo "==> Updating $INSTALL_DIR/etc/apt/sources.list"
-wget https://www.postgresql.org/media/keys/ACCC4CF8.asc -O $INSTALL_DIR/root/postgresql_signing.key
+curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc -o $INSTALL_DIR/root/postgresql_signing.key
 chroot $INSTALL_DIR apt-key add /root/postgresql_signing.key
 cat << SOURCES >> $INSTALL_DIR/etc/apt/sources.list
 deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.6
