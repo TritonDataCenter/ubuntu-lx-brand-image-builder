@@ -39,9 +39,9 @@ done
 
 echo "==> Downloading package and SHASUMs from https://nodejs.org/dist/"
 
-curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz"
+curl -sSLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz"
 
-curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc"
+curl -sSLO "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc"
 
 echo "==> Verifying package"
 gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc
