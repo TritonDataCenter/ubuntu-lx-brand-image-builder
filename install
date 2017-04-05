@@ -370,8 +370,8 @@ echo "====> Downloading package and SHASUMs from https://us-east.manta.joyent.co
 DTRACE_PACKAGE="dtracetools-lx_1.0_amd64.deb"
 D_PKG_SHASUM="shasum256.txt"
 
-curl -SLO https://us-east.manta.joyent.com/joyentsoln/public/images/lx-brand/devel/packages/${DTRACE_PACKAGE}
-curl -SLO https://us-east.manta.joyent.com/joyentsoln/public/images/lx-brand/devel/packages/${D_PKG_SHASUM}
+curl -sSLO https://us-east.manta.joyent.com/joyentsoln/public/images/lx-brand/devel/packages/${DTRACE_PACKAGE}
+curl -sSLO https://us-east.manta.joyent.com/joyentsoln/public/images/lx-brand/devel/packages/${D_PKG_SHASUM}
 
 echo "====> Verifying package"
 grep " ${DTRACE_PACKAGE}\$" ${D_PKG_SHASUM} | sha256sum -c - 
