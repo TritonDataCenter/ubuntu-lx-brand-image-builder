@@ -1,6 +1,5 @@
 set -euo pipefail
 IFS=$'\n\t'
-set -o xtrace
 
 usage() {
 cat <<EOF
