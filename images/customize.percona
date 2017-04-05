@@ -2,7 +2,7 @@ echo "==> Updating $INSTALL_DIR/etc/apt/sources.list"
 
 echo "==> Installing custom packages."
 pkill -9 mysql
-wget https://repo.percona.com/apt/percona-release_0.1-4.trusty_all.deb -O $INSTALL_DIR/trusty_all.deb
+curl -sS -o $INSTALL_DIR/trusty_all.deb https://repo.percona.com/apt/percona-release_0.1-4.trusty_all.deb
 chroot $INSTALL_DIR dpkg -i trusty_all.deb
 chroot $INSTALL_DIR apt-get -y update
 chroot $INSTALL_DIR apt-get -y upgrade
