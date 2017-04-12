@@ -1,19 +1,17 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2015 Joyent Inc., All rights reserved.
+# Copyright (c) 2017 Joyent Inc., All rights reserved.
 #
 # Install Ubuntu 14.04 into a directory, modify the installation, then tar it up.
 #
-
-set -euo pipefail
-IFS=$'\n\t'
-
-TRACE=
 
 if [[ -n "$TRACE" ]]; then
   export PS4='[\D{%FT%TZ}] ${BASH_SOURCE}:${LINENO}: ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
   set -o xtrace
 fi
+
+set -euo pipefail
+IFS=$'\n\t'
 
 GUESTTOOLS=guesttools
 BUILD_DATE=$(date +%Y%m%d)
@@ -161,7 +159,7 @@ umount_chroot() {
         echo "====> Unmounting /sys in chroot"
         umount -lf $INSTALL_DIR/sys
     fi
-    
+
     if grep -qs "$INSTALL_DIR/proc" $INSTALL_DIR/proc/mounts; then
         echo "====> Unmounting /proc in chroot"
         umount -lf $INSTALL_DIR/proc
@@ -175,7 +173,7 @@ if [[ -d $INSTALL_DIR ]]; then
 
   # umount previous /proc and /sys if they exist
   umount_chroot
-  
+
   rm -rf $INSTALL_DIR
   mkdir -p $INSTALL_DIR
 fi
@@ -234,7 +232,7 @@ chroot $INSTALL_DIR apt-get -y install --no-install-recommends python-software-p
 CHECK_VERSION=$(echo "$(. $INSTALL_DIR/etc/os-release && echo $VERSION_ID)>14.04" | bc)
 
 if [[ "$CHECK_VERSION" -eq 1 ]]; then
-  
+
   # Uninstall udev
   # See https://github.com/joyent/smartos-live/issues/596
   echo "Removing udev package"
@@ -251,7 +249,7 @@ if [[ "$CHECK_VERSION" -eq 1 ]]; then
   # TODO: This should be removed when the relevant cgroup etc support is in
   # the platform.
   SERVICES=( systemd-hostnamed systemd-localed systemd-timedated )
-  
+
   for SERVICE in "${SERVICES[@]}"; do
     echo "==> Adding systemd overrides for $SERVICE"
     OVERRIDE_DIR=$INSTALL_DIR/etc/systemd/system/${SERVICE}.service.d
@@ -317,7 +315,7 @@ start on stopped rc RUNLEVEL=[2345] and (
 stop on runlevel [!2345]
 
 respawn
-exec /sbin/getty -L 115200 ttyS0 vt102 
+exec /sbin/getty -L 115200 ttyS0 vt102
 
 TTYS0
 
@@ -374,7 +372,7 @@ curl -sSLO https://us-east.manta.joyent.com/joyentsoln/public/images/lx-brand/de
 curl -sSLO https://us-east.manta.joyent.com/joyentsoln/public/images/lx-brand/devel/packages/${D_PKG_SHASUM}
 
 echo "====> Verifying package"
-grep " ${DTRACE_PACKAGE}\$" ${D_PKG_SHASUM} | sha256sum -c - 
+grep " ${DTRACE_PACKAGE}\$" ${D_PKG_SHASUM} | sha256sum -c -
 
 echo "====> Installing into $INSTALL_DIR"
 dpkg --root $INSTALL_DIR -i ${DTRACE_PACKAGE}

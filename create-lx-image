@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2015 Joyent Inc., All rights reserved.
+# Copyright (c) 2017 Joyent Inc., All rights reserved.
 #
 # Create an lx-brand image from a given tar file
-
-set -euo pipefail
-IFS=$'\n\t'
-
-TRACE=
 
 if [[ -n "$TRACE" ]]; then
   export PS4='[\D{%FT%TZ}] ${BASH_SOURCE}:${LINENO}: ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
   set -o xtrace
 fi
+
+set -euo pipefail
+IFS=$'\n\t'
 
 BUILD_DATE=$(date +%Y%m%d)
 TARBALL=
@@ -193,10 +191,10 @@ modify_image() {
   mkdir -p $zroot/native/usr
   mkdir -p $zroot/native/var
   echo "====> done."
-  
+
   # Create the /var/ld/ld.config files that will point to /native/lib for our
   # Solaris libraries.
-  
+
   echo "====> Creating the /var/ld/ld.config file..."
   mkdir $zroot/var/ld
   mkdir $zroot/var/ld/64
@@ -212,7 +210,7 @@ fi
 if crle -64 -c $zroot/var/ld/64/ld.config \
   -l /native/lib/amd64:/native/usr/lib/amd64 \
   -s /native/lib/secure/amd64:/native/usr/lib/secure/amd64 ; then
-  echo "====> Created \"$zroot/var/ld/64/ld.config\""  
+  echo "====> Created \"$zroot/var/ld/64/ld.config\""
 else
   echo "====> Creation of \"$zroot/var/ld/64/ld.config\" failed!"
   exit 1
@@ -223,23 +221,23 @@ cat << EOF > $zroot/etc/fstab
 none		/			zfs	defaults	1 1
 proc		/proc			proc	defaults	0 0
 EOF
-  
+
   echo "==> Image modification complete."
 }
 
 create_file() {
   echo "==> Creating image file:"
-  
+
   echo "====> Creating snapshot..."
   zfs snapshot zones/$IUUID@final
-  
+
   echo "====> Doing a zfs send. This may take a few minutes..."
   zfs send zones/$IUUID@final | gzip -9 > ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz
   echo "====> Done."
-  
+
   echo "====> Cleaning up..."
   zfs destroy -r zones/$IUUID
-  
+
   echo "==> Image File created!"
   echo "==>"
 }
