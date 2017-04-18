@@ -221,11 +221,11 @@ echo "==> Updating packages"
 chroot $INSTALL_DIR dpkg-divert --local --rename --add /sbin/initctl
 chroot $INSTALL_DIR ln -s /bin/true /sbin/initctl
 
-chroot $INSTALL_DIR apt-get -qq -y update
-chroot $INSTALL_DIR apt-get -qq -y upgrade
+chroot $INSTALL_DIR apt-get -qq update
+chroot $INSTALL_DIR apt-get -qq upgrade
 
 echo "==> Installing additional packages"
-chroot $INSTALL_DIR apt-get -qq -y install --no-install-recommends python-software-properties software-properties-common
+chroot $INSTALL_DIR apt-get -qq install --no-install-recommends python-software-properties software-properties-common
 
 # Get release version via os-release
 # shellcheck source=/dev/null
@@ -236,8 +236,8 @@ if [[ "$CHECK_VERSION" -eq 1 ]]; then
   # Uninstall udev
   # See https://github.com/joyent/smartos-live/issues/596
   echo "Removing udev package"
-  chroot $INSTALL_DIR apt-get -qq -y remove udev
-  chroot $INSTALL_DIR apt-get -qq -y autoremove
+  chroot $INSTALL_DIR apt-get -qq remove udev
+  chroot $INSTALL_DIR apt-get -qq autoremove
 
   # Systemd overrides for Ubuntu 16.04 and newer
   #
@@ -276,8 +276,8 @@ Pin-Priority: -1
 MAKEDEV
 
 echo "==> Cleaning up caches etc."
-chroot $INSTALL_DIR apt-get -qq -y autoremove
-chroot $INSTALL_DIR apt-get -qq -y clean
+chroot $INSTALL_DIR apt-get -qq autoremove
+chroot $INSTALL_DIR apt-get -qq clean
 
 # Remove the divert that disables services
 chroot $INSTALL_DIR rm -f /sbin/initctl
