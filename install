@@ -179,7 +179,7 @@ if [[ -d $INSTALL_DIR ]]; then
 fi
 
 debootstrap --components=main --arch=$ARCH \
-    --include=apt-transport-https,ca-certificates,curl,dbus,gettext-base,less,man-db,openssh-server,sudo,wget,vim \
+    --include=ca-certificates,curl,dbus,gettext-base,less,man-db,openssh-server,sudo,wget,vim \
     $RELEASE $INSTALL_DIR $MIRROR
 echo "==> Done!"
 
@@ -225,7 +225,7 @@ chroot $INSTALL_DIR apt-get -qq update
 chroot $INSTALL_DIR apt-get -qq upgrade
 
 echo "==> Installing additional packages"
-chroot $INSTALL_DIR apt-get -qq install --no-install-recommends python-software-properties software-properties-common
+chroot $INSTALL_DIR apt-get -qq install --no-install-recommends software-properties-common
 
 # Get release version via os-release
 # shellcheck source=/dev/null
@@ -299,6 +299,7 @@ rm -rf $INSTALL_DIR/etc/resolvconf/resolv.conf.d/tail
 rm -rf $INSTALL_DIR/etc/resolvconf/resolv.conf.d/original
 
 echo "==> Adding getty service on ttyS0 for 'vmadm console' command"
+mkdir -p $INSTALL_DIR/etc/init
 cat << TTYS0 > $INSTALL_DIR/etc/init/ttyS0.conf
 # ttyS0 - getty
 #
